@@ -58,9 +58,9 @@ def royxat(a, s):
 
 
 class Jurnal:
-    def __init__(self):
-        os.makedirs(S.yol("logs"), exist_ok=True)
-        self.f = open(S.yol("logs", f"pipeline_{datetime.datetime.now():%Y%m%d_%H%M%S}.log"), "a", encoding="utf-8")
+    def __init__(self, teg="tanlangan"):
+        os.makedirs(S.yol("logs"), exist_ok=True)       # parallel run'lar aralashmasin: nomda viloyat
+        self.f = open(S.yol("logs", f"pipeline_{teg}_{datetime.datetime.now():%Y%m%d_%H%M%S}.log"), "a", encoding="utf-8")
     def __call__(self, m=""):
         print(m, flush=True); self.f.write(m + "\n"); self.f.flush()
 
@@ -93,7 +93,7 @@ def indeks(a, s):
         raise SystemExit("--tuman, --viloyat yoki --hammasi bering")
     if r.empty:
         raise SystemExit("Tuman topilmadi (nomini `python pipeline.py royxat` dan oling)")
-    log = Jurnal(); t0 = time.time(); xulosa = []
+    log = Jurnal(S.slug(a.viloyat) if a.viloyat else ("hammasi" if a.hammasi else "tanlangan")); t0 = time.time(); xulosa = []
     log(f"PIPELINE indeks — {len(r)} tuman — {datetime.datetime.now():%Y-%m-%d %H:%M} | davr {s['davr']['boshi']}..{s['davr']['oxiri']}")
     for i, row in r.iterrows():
         tm = row.tuman; sl = S.slug(tm); f = fayllar(sl); holat = "tayyor"
