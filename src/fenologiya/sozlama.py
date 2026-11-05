@@ -23,5 +23,6 @@ def kirish_yoli(s):
 
 
 def slug(tuman):
-    t = tuman.lower().replace("'", "").replace(" tumani", "").replace(" shahri", "_sh")
-    return re.sub(r"[^a-z0-9_]+", "_", t).strip("_")
+    """To'liq nomdan: 'Jomboy tumani' -> 'jomboy_tumani', 'Guliston' -> 'guliston' (to'qnashuv bo'lmasin)."""
+    t = tuman.lower().replace("'", "").replace("`", "")
+    return re.sub(r"[^a-z0-9]+", "_", t).strip("_")

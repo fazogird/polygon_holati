@@ -19,3 +19,4 @@ kim so'rasa ham "nega shunday qilingan" ga javob shu yerda.
 | [0006](0006-zonal-statistika-usuli.md) | Zonal statistika: mavsum sinfi bo'yicha yorliq-rastr + bincount | 2026-11-05 | qabul qilingan |
 | [0007](0007-piksel-niqobi.md) | Piksel niqobi: SCL + qaytish chegarasi (qorong'i piksellar) | 2026-11-05 | qabul qilingan |
 | [0008](0008-ish-tartibi.md) | Ish tartibi: asosiy run'larni foydalanuvchi qiladi | 2026-11-05 | qabul qilingan |
+| [0009](0009-kop-tuman-pipeline.md) | Ko'p tuman pipeline (davom ettirish), fayl nomlari, ikki repozitoriy | 2026-11-05 | qabul qilingan |

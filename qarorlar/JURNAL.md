@@ -21,6 +21,11 @@
   bug'doy fevraldan yashil, iyunda o'riladi; "Ikkilamchi" Kartoshka aslida may–iyulda faol; "Boshqa" (Mavsumiy)
   faqat may–iyunda faol; "Birlamchi aniqlanmagan" may–iyul. → 04 da faollik oralig'i dalaning o'z egri chizig'idan.
 
+- Git: foydalanuvchi `origin` ni GitLab `dalaga_index_run` ga o'zgartirgan, push o'tmagan (GitLab boshlang'ich
+  commit). Boshlang'ich commit birlashtirildi, force'siz push: GitLab `master` + GitHub `main` → qaror 0009.
+- `pipeline.py` (ko'p tuman, davom ettirish) va `royxat` qo'shildi; fayl nomlari to'liq tuman nomidan (to'qnashuv
+  tuzatildi), Jomboy fayllari qayta nomlandi. Samarqand: 18 tuman, qolgan 17 ~7 soat (taxmin).
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni

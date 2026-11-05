@@ -36,6 +36,7 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 | 01 | `01_geom_tayyorlash.py` | konturlar → `uniqueid` + mavsum + geometriya (UTM 42N), ichki bufer **maydonga qarab** | tayyor |
 | 02 | `02_stac_qidiruv.py` | davr bo'yicha Sentinel-2 sahnalari ro'yxati (bulut filtri) | tayyor |
 | 03 | `03_indeks_qator.py` | har kontur × sana: NDVI, EVI2, NDMI, toza piksel soni | tayyor |
+| 03b | `03b_grafik.py` | namunaviy konturlar NDVI grafiklari (tekshirish) | tayyor |
 | 04 | `04_fenologiya.py` | silliqlash, mavsum boshi/oxiri, sikl soni, mavsum bo'yicha faollik | keyingi |
 | 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
 
@@ -62,7 +63,22 @@ Keyin `conda activate fenologiya` ishlaydi.
 
 **C. VS Code** — `Ctrl+Shift+P` → *Python: Select Interpreter* → `fenologiya`; yangi ochilgan terminal muhitni o'zi yoqadi.
 
-## Ishga tushirish tartibi (bitta tuman, masalan Jomboy)
+## Ko'p tuman: `pipeline.py` (tavsiya etiladi)
+
+Har tuman uchun 01 → 02 → 03 ni ketma-ket bajaradi. **Davom ettiradi**: natija fayli bor qadam o'tkazib yuboriladi —
+run to'xtasa (internet, kompyuter o'chsa), xuddi shu buyruqni qayta bering. Bir tuman xato bersa keyingisiga o'tadi,
+oxirida xulosa chiqaradi. Jurnal: `logs\pipeline_*.log`, holat: `logs\holat.csv`.
+```
+.\run.bat pipeline.py royxat                                   # barcha tumanlar, holati, taxminiy vaqt
+.\run.bat pipeline.py royxat --viloyat "Samarqand viloyati"
+.\run.bat pipeline.py indeks --viloyat "Samarqand viloyati"    # butun viloyat
+.\run.bat pipeline.py indeks --tuman "Urgut tumani" "Tayloq tumani"
+.\run.bat pipeline.py indeks --hammasi                         # hamma tuman (bir necha o'n soat)
+```
+`--ishchi N` — parallel oqimlar (standart 6), `--qayta` — bor natijalarni ham qaytadan hisoblash.
+Tavsiya: viloyatma-viloyat, kechasi yoki dam olish kunlari ishga tushiring.
+
+## Ishga tushirish tartibi (bitta tuman, qadamma-qadam)
 
 Muhit yoqilgan terminalda (yoki `python` o'rniga `.\run.bat`):
 ```
