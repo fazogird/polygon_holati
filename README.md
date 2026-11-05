@@ -89,15 +89,15 @@ cd D:\Tasks\ekin_fenologiya
 python tests\test_indeks.py
 python tests\test_bufer.py
 ```
-2. Konturlarni tayyorlash (~30 s) → `data\kirish\konturlar_jomboy.gpkg`
+2. Konturlarni tayyorlash (~30 s) → `data\kirish\konturlar_jomboy_tumani.gpkg`
 ```
 python scripts\01_geom_tayyorlash.py --tuman "Jomboy tumani"
 ```
-3. Sahnalarni qidirish (~5 s) → `data\oraliq\sahnalar_jomboy.json`
+3. Sahnalarni qidirish (~5 s) → `data\oraliq\sahnalar_jomboy_tumani.json`
 ```
 python scripts\02_stac_qidiruv.py --tuman "Jomboy tumani"
 ```
-4. Indeks vaqt qatori (Jomboy, fevral–oktyabr: ~40 daqiqa) → `data\oraliq\qator_jomboy.parquet`
+4. Indeks vaqt qatori (Jomboy, fevral–oktyabr: ~15 daqiqa) → `data\oraliq\qator_jomboy_tumani.parquet`
 ```
 python scripts\03_indeks_qator.py --tuman "Jomboy tumani" --ishchi 6
 ```
