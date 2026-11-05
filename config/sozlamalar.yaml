@@ -32,6 +32,26 @@ min_toza_piksel: 3              # sanadagi minimal toza piksel soni
 
 indekslar: [ndvi, evi2, ndmi]
 
+# 04 fenologiya (qaror 0010)
+fenologiya:
+  min_toza_ulush: 0.5           # dalaning kamida 50% i toza bo'lgan kunlar olinadi
+  pastga_sakrash: 0.15          # ikki qo'shnisidan shuncha past yakka nuqta = bulut qoldig'i, olib tashlanadi
+  silliqlash_kun: 15            # kunlik interpolyatsiyadan keyin surilma o'rtacha oynasi
+  faol_min_ndvi: 0.30           # faol deyish uchun mutlaq minimal NDVI
+  faol_nisbiy: 0.35             # va asos + 35% * (cho'qqi - asos) dan yuqori
+  min_amplituda: 0.15           # cho'qqi - asos bundan kichik bo'lsa: dala yil bo'yi faol emas
+  min_sikl_kun: 20              # bundan qisqa faol oraliq hisobga olinmaydi
+  chegara_ulush: 0.20           # sikl boshi/oxiri: o'z amplitudasining 20% i (eng past nuqtadan cho'qqigacha)
+  chegarada_faol_ndvi: 0.40     # davr boshida/oxirida NDVI shundan yuqori bo'lsa faollik davr chegarasidan
+  birlashtirish_kun: 15         # sikllar orasidagi bundan qisqa pasayish (beda o'rimi) birlashtiriladi
+  uzun_sikl_kun: 150            # bundan uzun bitta sikl = butun mavsum (paxta, bog')
+  mavsum_bolinishi: "06-20"     # yagona sikl cho'qqisi shu sanagacha -> Birlamchi, keyin -> Ikkilamchi
+  oldingi_sugorish_kun: 0       # suv_boshi faollik boshidan necha kun oldin (ekishdan oldingi sug'orish)
+  qatiy_oyna:                   # yorliq mosligini tekshirish uchun hozirgi qat'iy oylar
+    Birlamchi ekin: [3, 5]
+    Ikkilamchi ekin: [6, 10]
+    Mavsumiy ekin: [3, 10]
+
 ishchi: 12                      # parallel jarayonlar
 
 kirish_konturlar: ../bir_ikki_lamchi/natija/ekin_yerlar_toliq.gpkg

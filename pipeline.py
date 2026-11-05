@@ -12,6 +12,7 @@ Buyruqlar (muhit yoqilgan terminalda yoki python o'rniga .\\run.bat):
   python pipeline.py indeks --tuman "Jomboy tumani" "Urgut tumani"
   python pipeline.py indeks --viloyat "Samarqand viloyati" [--ishchi 6]
   python pipeline.py indeks --hammasi
+  python pipeline.py fenologiya --hammasi                              04: faol davr va suv oylari (03 tayyorlari)
 """
 import os, sys, csv, time, argparse, datetime, subprocess
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -118,6 +119,28 @@ def indeks(a, s):
     log(f"Tayyor: {len(xulosa) - len(xato)} / {len(xulosa)}" + (f" | xato: {xato} — buyruqni qayta bering" if xato else ""))
 
 
+def fenologiya(a, s):
+    """04 — 03 natijasi bor tumanlar uchun (tez: tuman boshiga bir necha soniya)."""
+    r = tumanlar(s, a.viloyat, a.tuman if a.tuman else None)
+    if not a.hammasi and not a.viloyat and not a.tuman:
+        raise SystemExit("--tuman, --viloyat yoki --hammasi bering")
+    log = Jurnal("fenologiya"); t0 = time.time(); xulosa = []
+    for i, row in r.iterrows():
+        tm = row.tuman; sl = S.slug(tm)
+        out = S.yol("data", "natija", f"fenologiya_{sl}.parquet")
+        if not os.path.exists(fayllar(sl)["03"]):
+            xulosa.append((tm, "03 yo'q")); continue
+        if os.path.exists(out) and not a.qayta:
+            xulosa.append((tm, "bor")); continue
+        log(f"[{i + 1}/{len(r)}] {tm}")
+        ok, sek = qadam(log, "04_fenologiya.py", ["--tuman", tm])
+        holat_yoz(tm, "04", "ok" if ok else "XATO", sek)
+        xulosa.append((tm, "tayyor" if ok else "XATO"))
+    log(f"\n=== 04 XULOSA ({(time.time() - t0) / 60:.1f} daqiqa) ===")
+    for tm, h in xulosa:
+        log(f"  {h:8s} {tm}")
+
+
 def main():
     ap = argparse.ArgumentParser(description="ekin_fenologiya pipeline (README.md)")
     sub = ap.add_subparsers(dest="buyruq", required=True)
@@ -126,8 +149,11 @@ def main():
     i = sub.add_parser("indeks", help="01 -> 02 -> 03 tanlangan tumanlar uchun")
     i.add_argument("--tuman", nargs="*"); i.add_argument("--viloyat"); i.add_argument("--hammasi", action="store_true")
     i.add_argument("--ishchi", type=int, default=6); i.add_argument("--qayta", action="store_true")
+    f = sub.add_parser("fenologiya", help="04 — 03 tayyor tumanlar uchun faol davr va suv oylari")
+    f.add_argument("--tuman", nargs="*"); f.add_argument("--viloyat"); f.add_argument("--hammasi", action="store_true")
+    f.add_argument("--qayta", action="store_true")
     a = ap.parse_args(); s = S.yuklash()
-    royxat(a, s) if a.buyruq == "royxat" else indeks(a, s)
+    {"royxat": royxat, "indeks": indeks, "fenologiya": fenologiya}[a.buyruq](a, s)
 
 
 if __name__ == "__main__":

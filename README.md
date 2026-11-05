@@ -37,7 +37,7 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 | 02 | `02_stac_qidiruv.py` | davr bo'yicha Sentinel-2 sahnalari ro'yxati (bulut filtri) | tayyor |
 | 03 | `03_indeks_qator.py` | har kontur × sana: NDVI, EVI2, NDMI, toza piksel soni | tayyor |
 | 03b | `03b_grafik.py` | namunaviy konturlar NDVI grafiklari (tekshirish) | tayyor |
-| 04 | `04_fenologiya.py` | silliqlash, mavsum boshi/oxiri, sikl soni, mavsum bo'yicha faollik | keyingi |
+| 04 | `04_fenologiya.py` | silliqlash, faol sikllar, mavsum bo'yicha faol davr, `suv_boshi_ndvi`/`suv_oxiri_ndvi` | tayyor |
 | 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
 
 Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)**.
@@ -76,7 +76,16 @@ oxirida xulosa chiqaradi. Jurnal: `logs\pipeline_*.log`, holat: `logs\holat.csv`
 .\run.bat pipeline.py indeks --hammasi                         # hamma tuman (bir necha o'n soat)
 ```
 `--ishchi N` — parallel oqimlar (standart 6), `--qayta` — bor natijalarni ham qaytadan hisoblash.
-Tavsiya: viloyatma-viloyat, kechasi yoki dam olish kunlari ishga tushiring.
+Tavsiya: viloyatma-viloyat, kechasi yoki dam olish kunlari ishga tushiring. 4 viloyatni 4 ta terminalda parallel
+ishlatish mumkin (katta viloyatlarga `--ishchi 4` — xotira uchun); kompyuter uxlab qolmasin.
+
+**04 — fenologiya** (03 tayyor tumanlar uchun, tuman boshiga bir necha soniya):
+```
+.\run.bat pipeline.py fenologiya --hammasi
+.\run.bat scripts\03b_grafik.py --tuman "Jomboy tumani"         # tekshirish grafiklari (silliq chiziq + faol oraliq)
+```
+Natija: `data\natija\fenologiya_<tuman>.parquet` — har kontur: `faol`, `boshi_sana`, `oxiri_sana`, `suv_boshi_ndvi`,
+`suv_oxiri_ndvi`, `yorliq_mos`, `ishonch` va boshq. (qaror 0010).
 
 ## Ishga tushirish tartibi (bitta tuman, qadamma-qadam)
 

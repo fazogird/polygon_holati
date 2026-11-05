@@ -26,6 +26,13 @@
 - `pipeline.py` (ko'p tuman, davom ettirish) va `royxat` qo'shildi; fayl nomlari to'liq tuman nomidan (to'qnashuv
   tuzatildi), Jomboy fayllari qayta nomlandi. Samarqand: 18 tuman, qolgan 17 ~7 soat (taxmin).
 
+- 18:00 — foydalanuvchi 4 viloyatni 4 ta VS Code terminalida parallel ishga tushirdi (Samarqand va Qashqadaryo
+  `--ishchi 4`, Farg'ona va Sirdaryo `--ishchi 6`). Taxmin: tugashi ~3:30–6:30. RAM 64 GB (bo'sh ~29 GB).
+- **04 fenologiya** yozildi va Jomboy'da sinaldi (9 s): faol sikllar, sikl chegarasi o'z amplitudasidan (20%),
+  mavsumga biriktirish, NDVI suv oylari → qaror 0010. Birinchi variantda ikkinchi ekin kech boshlanardi va bog' erta
+  tugardi — grafikda ko'rinib, tuzatildi. `tests/test_fen.py`, `pipeline.py fenologiya`, 03b ga silliq chiziq.
+  Run vaqtida 01–03 va ular ishlatadigan modullarga tegilmadi.
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni
