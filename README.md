@@ -40,7 +40,7 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 | 04 | `04_fenologiya.py` | silliqlash, faol sikllar, mavsum bo'yicha faol davr, `suv_boshi_ndvi`/`suv_oxiri_ndvi` | tayyor |
 | 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
 
-Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)**.
+Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)** · To'liq ishga tushirish yo'riqnomasi: **[docs/ISHGA_TUSHIRISH.md](docs/ISHGA_TUSHIRISH.md)**.
 
 ## Muhitni yoqish (uchta yo'l)
 

@@ -75,6 +75,24 @@ def holat_yoz(tuman, qadam, holat, sek):
         w.writerow([datetime.datetime.now().isoformat(timespec="seconds"), tuman, qadam, holat, round(sek)])
 
 
+def band(tuman, sl, soat=12):
+    """Boshqa jarayon shu tuman ustida ishlayaptimi? (a) yangi qulf fayli bor, yoki (b) holat.csv da so'nggi
+    `soat` ichida 01/02 'ok' bor-u, undan keyin 03 yozuvi yo'q (eski, qulfsiz jarayonlar uchun)."""
+    q = S.yol("logs", f"qulf_{sl}.lock")
+    if os.path.exists(q) and time.time() - os.path.getmtime(q) < soat * 3600:
+        return True
+    p = S.yol("logs", "holat.csv")
+    if not os.path.exists(p):
+        return False
+    import pandas as pd
+    h = pd.read_csv(p, encoding="utf-8-sig", dtype=str)            # "01" son bo'lib qolmasin
+    h = h[(h.tuman == tuman) & (pd.to_datetime(h.vaqt) > pd.Timestamp.now() - pd.Timedelta(hours=soat))]
+    if h.empty:
+        return False
+    last = h.iloc[-1]
+    return last.qadam in ("01", "02") and last.holat == "ok"
+
+
 def qadam(log, nom, args):
     t = time.time()
     p = subprocess.Popen([sys.executable, os.path.join(ROOT, "scripts", nom)] + args, stdout=subprocess.PIPE,
@@ -94,10 +112,23 @@ def indeks(a, s):
         raise SystemExit("--tuman, --viloyat yoki --hammasi bering")
     if r.empty:
         raise SystemExit("Tuman topilmadi (nomini `python pipeline.py royxat` dan oling)")
-    log = Jurnal(S.slug(a.viloyat) if a.viloyat else ("hammasi" if a.hammasi else "tanlangan")); t0 = time.time(); xulosa = []
-    log(f"PIPELINE indeks — {len(r)} tuman — {datetime.datetime.now():%Y-%m-%d %H:%M} | davr {s['davr']['boshi']}..{s['davr']['oxiri']}")
+    if a.teskari:                                  # ikkinchi terminal shu viloyatni oxiridan boshlaydi
+        r = r.iloc[::-1].reset_index(drop=True)
+    teg = (S.slug(a.viloyat) if a.viloyat else ("hammasi" if a.hammasi else "tanlangan")) + ("_teskari" if a.teskari else "")
+    log = Jurnal(teg); t0 = time.time(); xulosa = []
+    log(f"PIPELINE indeks — {len(r)} tuman — {datetime.datetime.now():%Y-%m-%d %H:%M} | davr {s['davr']['boshi']}..{s['davr']['oxiri']}"
+        + (" | TESKARI tartib" if a.teskari else ""))
     for i, row in r.iterrows():
         tm = row.tuman; sl = S.slug(tm); f = fayllar(sl); holat = "tayyor"
+        if not os.path.exists(f["03"]) and band(tm, sl):
+            log(f"\n[{i + 1}/{len(r)}] {tm}: boshqa jarayon ishlayapti — o'tkazildi")
+            xulosa.append((tm, "boshqada")); continue
+        qulf = S.yol("logs", f"qulf_{sl}.lock")
+        if not os.path.exists(f["03"]):
+            try:
+                os.close(os.open(qulf, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+            except FileExistsError:
+                log(f"\n[{i + 1}/{len(r)}] {tm}: qulflangan — o'tkazildi"); xulosa.append((tm, "boshqada")); continue
         log(f"\n[{i + 1}/{len(r)}] {row.viloyat} / {tm} ({row.kontur} kontur)")
         rejalar = [("01", "01_geom_tayyorlash.py", ["--tuman", tm]),
                    ("02", "02_stac_qidiruv.py", ["--tuman", tm]),
@@ -111,6 +142,8 @@ def indeks(a, s):
             if not ok:
                 holat = f"XATO ({q})"; log(f"  !!! {q} xato bilan tugadi — keyingi tumanga o'tiladi"); break
             log(f"  {q}: tayyor ({sek:.0f} s)")
+        if os.path.exists(qulf):
+            os.remove(qulf)
         xulosa.append((tm, holat))
     log(f"\n=== XULOSA ({(time.time() - t0) / 60:.1f} daqiqa) ===")
     for tm, h in xulosa:
@@ -149,6 +182,7 @@ def main():
     i = sub.add_parser("indeks", help="01 -> 02 -> 03 tanlangan tumanlar uchun")
     i.add_argument("--tuman", nargs="*"); i.add_argument("--viloyat"); i.add_argument("--hammasi", action="store_true")
     i.add_argument("--ishchi", type=int, default=6); i.add_argument("--qayta", action="store_true")
+    i.add_argument("--teskari", action="store_true", help="tumanlarni oxiridan boshlash (2-terminal uchun)")
     f = sub.add_parser("fenologiya", help="04 — 03 tayyor tumanlar uchun faol davr va suv oylari")
     f.add_argument("--tuman", nargs="*"); f.add_argument("--viloyat"); f.add_argument("--hammasi", action="store_true")
     f.add_argument("--qayta", action="store_true")

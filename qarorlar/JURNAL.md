@@ -33,6 +33,14 @@
   tugardi — grafikda ko'rinib, tuzatildi. `tests/test_fen.py`, `pipeline.py fenologiya`, 03b ga silliq chiziq.
   Run vaqtida 01–03 va ular ishlatadigan modullarga tegilmadi.
 
+- ~18:20 holat: 4 jarayon xatosiz; Beshariq tugadi (56 kun, 943 s). Xotira har jarayonda ~0.6 GB (23 GB bo'sh),
+  tarmoq jami ~84 Mbit/s (karta 1 Gbit/s) → cheklov tarmoq emas, so'rov kechikishi.
+  **Muhim topilma**: ko'p tumanlar ikki orbita chegarasida — 80–105 kun (Jomboy 51). Taxmin 1.2–1.8× kam chiqdi;
+  qayta hisob: Farg'ona/Sirdaryo tunda tugaydi, Samarqand ~20–25 soat, Qashqadaryo ~30–35 soat.
+  → `pipeline.py indeks --teskari` (ikkinchi terminal oxiridan boshlaydi) va band/qulf tekshiruvi qo'shildi
+  (holat.csv dagi "01" son bo'lib o'qilish xatosi testda topilib tuzatildi).
+- `docs/ISHGA_TUSHIRISH.md` — to'liq yo'riqnoma (muhit, parallel run, kuzatish, davom ettirish, 04, git, muammolar).
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni
