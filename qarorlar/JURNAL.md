@@ -14,6 +14,13 @@
   (muhitni o'zi topadi) va README ga uch yo'l yozildi (run.bat / `conda init powershell` / VS Code interpreter).
 - Repozitoriy: https://github.com/fazogird/polygon_holati (`main`). Ma'lumotlar (`data/`, `logs/`) gitga kirmaydi.
 
+- **03 to'liq run (foydalanuvchi, Jomboy, fevral–oktyabr):** 101 sahna, 51 kun, 15 287 / 15 296 konturda qiymat,
+  636 081 qator, **934 s (~15.5 daq)**. NDVI −0.8…0.997 (niqob ishladi). Kontur boshiga median 41 toza kuzatuv;
+  bahorda siyrak (mart–may oyiga ~2), yozda oyiga 5–9.
+- **03b grafiklar** (9 namuna): usul ishlaydi; qat'iy oylar ko'p dalada mos emas —
+  bug'doy fevraldan yashil, iyunda o'riladi; "Ikkilamchi" Kartoshka aslida may–iyulda faol; "Boshqa" (Mavsumiy)
+  faqat may–iyunda faol; "Birlamchi aniqlanmagan" may–iyul. → 04 da faollik oralig'i dalaning o'z egri chizig'idan.
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni
