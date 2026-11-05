@@ -10,6 +10,10 @@
   qaror 0007 (niqob), `tests/test_indeks.py`.
 - Asosiy davr fevral–oktyabr 2026 → qaror 0003. Asosiy run'lar foydalanuvchi tomonidan → qaror 0008.
 
+- VS Code PowerShell da `conda` tanilmadi (conda PowerShell uchun `init` qilinmagan) → `run.bat` qo'shildi
+  (muhitni o'zi topadi) va README ga uch yo'l yozildi (run.bat / `conda init powershell` / VS Code interpreter).
+- Repozitoriy: https://github.com/fazogird/polygon_holati (`main`). Ma'lumotlar (`data/`, `logs/`) gitga kirmaydi.
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni
