@@ -1,0 +1,110 @@
+# polygon_holati
+
+*(lokal papka: `ekin_fenologiya`)*
+
+Har bir ekin konturi uchun **Sentinel-2 (10 m) indeks vaqt qatori** (NDVI, EVI2, NDMI) va undan
+**mavsum bo'yicha faollik** (dala qachon tirik bo'lgan → `suv_boshi` / `suv_oxiri`) — ET (suv iste'moli)
+hisobiga konturlarni mavsumlari ajratilgan holda tayyorlash uchun.
+
+Ekin turi aniqlanmaydi — faqat dalaning o'z "ritmi" (fenologiyasi).
+Kirish: `birlamchi_ikkilamchi` loyihasining natijasi (`uniqueid` bilan konturlar).
+
+## Tamoyillar
+- Konturlar **kompyuterdan chiqmaydi**: sun'iy yo'ldosh tasvirlari ochiq STAC/COG manbalardan oqim bilan o'qiladi,
+  hisob lokal (yoki tashkilotning o'z AWS serverida).
+- Manba konfiguratsiyada tanlanadi: `aws` (Earth Search, `sentinel-2-c1-l2a`) yoki `pc` (Planetary Computer).
+- Natija `uniqueid` bo'yicha — asl konturlar bilan lokalda birlashtiriladi.
+
+## Tuzilma
+```
+config/      sozlamalar.yaml — manba, sana oralig'i, indekslar, bulut chegarasi
+src/fenologiya/  kutubxona: STAC qidiruv, o'qish, indekslar, zonal statistika, fenologiya
+scripts/     pipeline qadamlari (00_ ... 0N_)
+data/        kirish/ oraliq/ natija/   (gitga kirmaydi)
+logs/        jurnallar                 (gitga kirmaydi)
+tests/       testlar (test_indeks, test_bufer)
+qarorlar/    qabul qilingan qarorlar va jarayon jurnali
+docs/        hujjat va rasmlar
+env/         conda muhit tavsifi
+run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
+```
+
+## Pipeline
+| Qadam | Skript | Nima | Holat |
+|---|---|---|---|
+| 00 | `00_test_tezlik.py` | manbalar (AWS / PC) mavjudligi va o'qish tezligi | tayyor |
+| 01 | `01_geom_tayyorlash.py` | konturlar → `uniqueid` + mavsum + geometriya (UTM 42N), ichki bufer **maydonga qarab** | tayyor |
+| 02 | `02_stac_qidiruv.py` | davr bo'yicha Sentinel-2 sahnalari ro'yxati (bulut filtri) | tayyor |
+| 03 | `03_indeks_qator.py` | har kontur × sana: NDVI, EVI2, NDMI, toza piksel soni | tayyor |
+| 04 | `04_fenologiya.py` | silliqlash, mavsum boshi/oxiri, sikl soni, mavsum bo'yicha faollik | keyingi |
+| 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
+
+Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)**.
+
+## Muhitni yoqish (uchta yo'l)
+
+**A. Eng oson — `run.bat`** (conda sozlanmagan bo'lsa ham ishlaydi; VS Code PowerShell yoki cmd da):
+```
+cd D:\Tasks\ekin_fenologiya
+.\run.bat scripts\01_geom_tayyorlash.py --tuman "Jomboy tumani"
+```
+Quyidagi buyruqlarda `python` o'rniga `.\run.bat` yozing.
+
+**B. Doimiy — PowerShell uchun conda ni bir marta sozlash** (`conda` "не распознано" xatosi chiqsa):
+```
+& "$env:LOCALAPPDATA\miniconda3\Scripts\conda.exe" init powershell
+```
+Terminalni yopib qayta oching. "Выполнение сценариев отключено" xatosi chiqsa, bir marta:
+```
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+Keyin `conda activate fenologiya` ishlaydi.
+
+**C. VS Code** — `Ctrl+Shift+P` → *Python: Select Interpreter* → `fenologiya`; yangi ochilgan terminal muhitni o'zi yoqadi.
+
+## Ishga tushirish tartibi (bitta tuman, masalan Jomboy)
+
+Muhit yoqilgan terminalda (yoki `python` o'rniga `.\run.bat`):
+```
+cd D:\Tasks\ekin_fenologiya
+```
+1. Tekshiruvlar (bir necha soniya):
+```
+python tests\test_indeks.py
+python tests\test_bufer.py
+```
+2. Konturlarni tayyorlash (~30 s) → `data\kirish\konturlar_jomboy.gpkg`
+```
+python scripts\01_geom_tayyorlash.py --tuman "Jomboy tumani"
+```
+3. Sahnalarni qidirish (~5 s) → `data\oraliq\sahnalar_jomboy.json`
+```
+python scripts\02_stac_qidiruv.py --tuman "Jomboy tumani"
+```
+4. Indeks vaqt qatori (Jomboy, fevral–oktyabr: ~40 daqiqa) → `data\oraliq\qator_jomboy.parquet`
+```
+python scripts\03_indeks_qator.py --tuman "Jomboy tumani" --ishchi 6
+```
+Har qadam o'z oraliq faylini qaytadan yozadi. Davr, bulut chegarasi, bufer — `config\sozlamalar.yaml` da.
+`--ishchi` — parallel o'qish oqimlari (internet sekin bo'lsa kamaytiring).
+Bir nechta tuman: `01` ga `--tuman "A tumani" "B tumani"` yoki `--hammasi`; `02` va `03` har tuman uchun alohida.
+
+## Manba tanlovi — tezlik testi (2026-11-05, ishxona PC, Jomboy bo'lagi ~6 mln piksel)
+
+| | AWS Earth Search | Planetary Computer |
+|---|---|---|
+| STAC qidiruv | ~1 s | ~1.6 s |
+| 10 m kanal (qizil) | **5–7.5 s** | 11–16.5 s |
+| 20 m kanal (SCL) | 0.8–1.9 s | 0.4–0.5 s |
+
+Ma'lumotning asosiy hajmi 10 m kanallar → **AWS ~2 baravar tez**; asosiy manba `aws`. Bitta oqim bilan o'lchangan,
+parallel o'qishda tezlik oshadi. Jurnallar: `logs/test_tezlik_*.json`.
+
+Eslatma: `gis_pro` muhitida numpy DLL nosozligi bor (matplotlib va `rasterio.windows.from_bounds` da
+`0xc06d007f`) — shuning uchun bu loyiha alohida `fenologiya` muhitida ishlaydi.
+
+## Muhit
+```
+conda env create -f env/environment.yml
+conda activate fenologiya
+```

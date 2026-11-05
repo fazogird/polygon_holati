@@ -1,0 +1,37 @@
+# ekin_fenologiya sozlamalari
+
+manba: aws                      # aws | pc
+
+manbalar:
+  aws:
+    stac: https://earth-search.aws.element84.com/v1
+    collection: sentinel-2-c1-l2a
+    kanallar: {qizil: red, nir: nir, swir16: swir16, scl: scl}
+    imzo: false
+  pc:
+    stac: https://planetarycomputer.microsoft.com/api/stac/v1
+    collection: sentinel-2-l2a
+    kanallar: {qizil: B04, nir: B08, swir16: B11, scl: SCL}
+    imzo: true                  # Planetary Computer SAS token
+
+davr:                           # asosiy oraliq (qaror 0003)
+  boshi: "2026-02-01"
+  oxiri: "2026-10-31"
+
+bulut_max_foiz: 70              # sahna darajasida; piksel darajasida SCL niqobi alohida
+scl_toza: [4, 5, 6, 7]          # SCL: 4 vegetatsiya, 5 ochiq tuproq, 6 suv, 7 aniqlanmagan (bulut/soya/qor emas)
+# kontur chetidan ichkariga bufer — MAYDONGA QARAB (qaror 0004). Kichik konturlar o'zgarishsiz qoladi.
+ichki_bufer:
+  pogonalar:                    # maydon (ga) >= min_ga bo'lsa shu bufer (m); eng kattasi tanlanadi
+    - {min_ga: 0.0, bufer_m: 0}
+    - {min_ga: 0.5, bufer_m: 5}
+    - {min_ga: 2.0, bufer_m: 10}
+  min_qolgan_ulush: 0.5         # bufer kontur maydonining kamida 50% ini qoldirsin, aks holda kichikroq bufer
+  min_qolgan_m2: 300            # va kamida ~3 ta 10 m piksel
+min_toza_piksel: 3              # sanadagi minimal toza piksel soni
+
+indekslar: [ndvi, evi2, ndmi]
+
+ishchi: 12                      # parallel jarayonlar
+
+kirish_konturlar: ../bir_ikki_lamchi/natija/ekin_yerlar_toliq.gpkg

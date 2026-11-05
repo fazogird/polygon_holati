@@ -1,0 +1,29 @@
+# ma'lumotlar va natijalar gitga kirmaydi
+data/*/*
+!data/*/.gitkeep
+logs/**
+!logs/.gitkeep
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.gpkg
+*.gpkg-*
+*.parquet
+*.tif
+*.tiff
+*.nc
+*.zarr/
+*.xlsx
+*.csv
+*.zip
+*.hyper
+# rasmlar faqat docs/img dan
+*.png
+!docs/img/*.png
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.claude/

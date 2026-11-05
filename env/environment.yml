@@ -1,0 +1,24 @@
+name: fenologiya
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - geopandas
+  - pyogrio
+  - shapely>=2
+  - pyproj
+  - rasterio
+  - rioxarray
+  - xarray
+  - dask
+  - odc-stac
+  - pystac-client
+  - planetary-computer
+  - exactextract
+  - pyarrow
+  - pandas
+  - numpy
+  - scipy
+  - pyyaml
+  - requests
+  - tqdm
