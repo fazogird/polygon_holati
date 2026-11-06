@@ -41,6 +41,29 @@
   (holat.csv dagi "01" son bo'lib o'qilish xatosi testda topilib tuzatildi).
 - `docs/ISHGA_TUSHIRISH.md` — to'liq yo'riqnoma (muhit, parallel run, kuzatish, davom ettirish, 04, git, muammolar).
 
+## 2026-11-06
+- **07:30 holat — 64/70 tayyor.** Farg'ona 20/20 (04:32 da, 640 daq), Sirdaryo 14/14 (kecha 21:21, 208 daq),
+  Qashqadaryo 17/18 (teskari terminal 13 soatda tugadi), Samarqand 13/18.
+- **Qotish:** Samarqand teskari terminali "Samarqand" tumanida (12 kontur) 51/51 kunni o'qib, natijani yozmay kecha
+  19:19 dan qotib qolgan (Ctrl+C ham ishlamadi → terminal o'ldirildi). Shu tuman alohida ishga tushirilganda 103 s da
+  muammosiz tugadi → tuman bilan bog'liq emas, tasodifiy (ehtimol javobsiz qolgan tarmoq so'rovi). Qolgan qulf fayli
+  `logs\qulf_samarqand.lock` qo'lda o'chirildi.
+- **DNS uzilishi:** Payariq jarayonida `CURL error: Could not resolve host` — 1 313 o'qish xatosi, 24 sana
+  (27-iyul – 17-sentyabr, 30-oktyabr). Bir vaqtda ishlagan boshqa jarayonlarda xato bo'lmagan; DNS keyin tiklandi.
+  Qiymatlar buzilmaydi (o'qilmagan kanal niqoblanadi), lekin Ikkilamchi mavsum kuzatuvlari yo'qolgani uchun Payariq
+  `--qayta` bilan qaytadan. Kechagi run'larda viloyat boshiga atigi 1–3 ta alohida o'qish xatosi — e'tiborsiz.
+- **`--qayta` tuzatishi:** o'ldirilgan jarayon `holat.csv` da "01/02 ok, 03 yo'q" izini qoldiradi → pipeline tumanni
+  "band" deb o'tkazardi. Endi `--qayta` bu belgiga qaramaydi (qulf baribir tekshiriladi). Xulosada "boshqa jarayonda"
+  va haqiqiy XATO ajratildi.
+- 08:30 — Qashqadaryo 18/18 ✅; qolgan 4 tuman 4 terminalda: Payariq (qayta), Pastdarg'om, Qo'shrabot, Paxtachi.
+  Eski (qulfni bilmaydigan) Samarqand terminali Pastdarg'om'dan keyin o'ldiriladi (Paxtachi ikki marta hisoblanmasin).
+
+### Keyingi himoyalar (run'lar tugagach)
+1. O'qish xatosida kunni 3 marta qayta urinish; baribir bo'lmasa — kun "muvaffaqiyatsiz" deb jurnalga (jim emas).
+2. Faqat muvaffaqiyatsiz kunlarni to'ldirish rejimi (butun tumanni qayta hisoblamasdan).
+3. Nazoratchi: jarayon 20 daqiqa chiqish bermasa — to'xtatib qayta boshlash; GDAL HTTP timeout.
+4. Sifat jadvali: har tuman uchun kunlar soni va o'qish xatolari.
+
 ### Taxminiy vaqt (sinovdan)
 ~45 s/kun (6 parallel oqim, ishxona interneti). Fevral–oktyabr ≈ 50–55 toza kun → **Jomboy uchun ~40 daqiqa**.
 70 tuman uchun ketma-ket bir necha soat → keyingi qadamda tezlashtirish (AWS serverida ishlatish yoki o'qishni

@@ -127,4 +127,9 @@ git push github master:main     # shaxsiy GitHub: polygon_holati
 | Vaqt taxmini 1.5–2× kam chiqdi | ikki orbita chegarasidagi tumanlarda 2× ko'p kun | 1-banddagi jadval; parallel/teskari terminallar |
 | `UserWarning: Could not parse bucket/account`, `NotGeoreferencedWarning` | kutubxona ogohlantirishlari | zararsiz; pipeline jurnalida yashiriladi |
 | GitLab push rad etildi | himoyalangan `master` + boshlang'ich commit | birlashtirib, force'siz push (5-band) |
+| Terminal bir joyda soatlab yangi qator chiqarmaydi, Ctrl+C ishlamaydi | tasodifiy qotish (javobsiz tarmoq so'rovi) | terminalni o'ldirish → `Remove-Item logs\qulf_<tuman>.lock` → o'sha buyruqni qayta berish |
+| `Ignoring read failure ... Could not resolve host` ko'p marta | ishxona DNS uzilishi | qiymat buzilmaydi, lekin kunlar yo'qoladi; DNS tiklangach tumanni `--tuman "X" --qayta` bilan qaytadan. Bir-ikkita alohida xato — e'tiborsiz |
+| `--qayta` bersa ham "boshqa jarayon ishlayapti — o'tkazildi" | o'ldirilgan jarayonning `holat.csv` dagi izi (eski versiya) | 2026-11-06 da tuzatilgan: `--qayta` endi bu belgiga qaramaydi |
+| O'ldirilgandan keyin tuman "qulflangan — o'tkazildi" | qulf fayli qolgan | `Remove-Item logs\qulf_<tuman>.lock` |
+| Eski terminal qulflarni bilmaydi (kod yangilanishidan oldin boshlangan) | jarayon kodni boshlanishida yuklaydi | u boshqa terminal ishlayotgan tumanga yetganda o'ldirish (natija bir xil, faqat vaqt behuda) |
 | Run vaqtida kodni o'zgartirish xavfi | pipeline har tuman uchun 01–03 ni **qaytadan** ishga tushiradi | run davomida `scripts\01–03` va `src\fenologiya\{muhit,sozlama,indeks}.py` ga tegilmaydi |
