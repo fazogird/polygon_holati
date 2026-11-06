@@ -120,7 +120,9 @@ def indeks(a, s):
         + (" | TESKARI tartib" if a.teskari else ""))
     for i, row in r.iterrows():
         tm = row.tuman; sl = S.slug(tm); f = fayllar(sl); holat = "tayyor"
-        if not os.path.exists(f["03"]) and band(tm, sl):
+        # --qayta: foydalanuvchi ochiq so'ragan — holat.csv belgisiga qaramaymiz (o'ldirilgan jarayon izi qolishi mumkin);
+        # qulf fayli baribir tekshiriladi (pastda)
+        if not os.path.exists(f["03"]) and not a.qayta and band(tm, sl):
             log(f"\n[{i + 1}/{len(r)}] {tm}: boshqa jarayon ishlayapti — o'tkazildi")
             xulosa.append((tm, "boshqada")); continue
         qulf = S.yol("logs", f"qulf_{sl}.lock")
@@ -148,8 +150,11 @@ def indeks(a, s):
     log(f"\n=== XULOSA ({(time.time() - t0) / 60:.1f} daqiqa) ===")
     for tm, h in xulosa:
         log(f"  {h:12s} {tm}")
-    xato = [tm for tm, h in xulosa if h != "tayyor"]
-    log(f"Tayyor: {len(xulosa) - len(xato)} / {len(xulosa)}" + (f" | xato: {xato} — buyruqni qayta bering" if xato else ""))
+    xato = [tm for tm, h in xulosa if h.startswith("XATO")]
+    boshqada = [tm for tm, h in xulosa if h == "boshqada"]
+    log(f"Tayyor: {len(xulosa) - len(xato) - len(boshqada)} / {len(xulosa)}"
+        + (f" | boshqa jarayonda: {boshqada}" if boshqada else "")
+        + (f" | XATO: {xato} — buyruqni qayta bering" if xato else ""))
 
 
 def fenologiya(a, s):
