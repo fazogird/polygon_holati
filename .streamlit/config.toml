@@ -1,0 +1,12 @@
+# Dashboard (scripts/05_dashboard.py) sozlamalari
+[browser]
+gatherUsageStats = false     # Streamlit telemetriyasi o'chiq — ma'lumot kompyuterdan chiqmaydi
+
+[server]
+address = "localhost"        # faqat shu kompyuterdan; tarmoqqa ochish: dashboard.bat --server.address 0.0.0.0
+port = 8501
+maxMessageSize = 400
+
+[theme]
+base = "light"
+primaryColor = "#1a9850"

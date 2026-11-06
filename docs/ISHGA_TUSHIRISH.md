@@ -93,6 +93,17 @@ o'tadi; oxirida **XULOSA** jadvali. Bitta tumanni qaytadan: `--tuman "X tumani" 
 Tuman boshiga bir necha soniya; faqat 03 tayyor tumanlar. Natija: `data\natija\fenologiya_<tuman>.parquet`
 (qaror 0010). Parametrlar: `config\sozlamalar.yaml` → `fenologiya:`.
 
+### Mos kelmagan konturlarni topish (ArcGIS / Excel)
+```
+.\run.bat scripts\04b_mos_kelmaganlar.py --tuman "Jomboy tumani"
+.\run.bat scripts\04b_mos_kelmaganlar.py --viloyat "Samarqand viloyati"
+.\run.bat scripts\04b_mos_kelmaganlar.py --hammasi
+```
+Natija `data\natija\eksport\`: `mos_kelmagan_<teg>.gpkg` (asl geometriya, ArcGIS da `yorliq_mos` bo'yicha
+Unique Values) va `.csv` (Excel). Ustunlar: qat'iy va NDVI suv oylari yonma-yon, faol davr sanalari, sikllar, ishonch.
+`--holat farqli` — faqat farqlilar; `--holat farqli faol_emas mos` — hammasi.
+Bitta konturni grafikda ko'rish: `.\run.bat scripts\03b_grafik.py --tuman "X" --uniqueid <id>`.
+
 ## 4. Tekshirish grafiklari
 ```
 .\run.bat scripts\03b_grafik.py --tuman "Qamashi tumani"
