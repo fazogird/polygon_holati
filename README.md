@@ -60,6 +60,7 @@ qarorlar/    qabul qilingan qarorlar va jarayon jurnali
 docs/        hujjat va rasmlar
 env/         conda muhit tavsifi
 run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
+dashboard.bat  interaktiv dashboard (scripts/dashboard.py, fenologiya_viz muhiti) -> http://localhost:8501
 ```
 
 ## Pipeline
@@ -73,6 +74,31 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 | 04 | `04_fenologiya.py` | silliqlash, faol sikllar, mavsum bo'yicha faol davr, `suv_boshi_ndvi`/`suv_oxiri_ndvi` | tayyor |
 | 04b | `04b_mos_kelmaganlar.py` | qat'iy oylarga mos kelmagan (`farqli`, `faol_emas`) konturlar — GPKG (ArcGIS) + CSV (Excel) | tayyor |
 | 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
+
+## Dashboard — natijani ko'rish (Excel o'rniga)
+
+Tuman xaritasi + konturni bosganda uning NDVI / EVI2 / NDMI vaqt qatori. Bepul (Streamlit + DuckDB + pydeck),
+kompyuterning o'zida ishlaydi; parquet'dan faqat kerakli qism o'qiladi, shuning uchun millionlab qatorda ham tez.
+Bir marta muhit yaratiladi (pipeline muhitidan alohida):
+```
+conda env create -f env\environment_viz.yml
+```
+Ishga tushirish → brauzerda http://localhost:8501 (to'xtatish: terminalda `Ctrl+C`):
+```
+.\dashboard.bat
+```
+- **Xarita va kontur:** viloyat / tuman tanlanadi; rang — tanlangan sanadagi NDVI/EVI2/NDMI (sana slayderi),
+  maksimal NDVI, toza kuzatuvlar soni, ekin turi, mavsum, 04 bo'lsa yorliq mosligi / faol kunlar / sikl soni /
+  cho'qqi oyi. Filtr: ekin turi, mavsum, yorliq, maydon. Fon: oddiy yoki sun'iy yo'ldosh (Esri).
+  Konturni bosing → o'ngda vaqt qatori (nuqta — toza kun, x — bulutli; silliq NDVI va 04 faol oraliq tasmasi),
+  fenologiya kartochkasi, CSV yuklab olish. **Solishtirish** yoqilsa bosilgan konturlar ustma-ust (8 tagacha).
+  uniqueid bo'yicha qidiruv konturga yaqinlashtiradi.
+- **Tuman bo'yicha:** ekin turi / mavsum / yorliq guruhlari bo'yicha median indeks egri chiziqlari, jadvallar,
+  Sentinel-2 kunlarining toza ulushi.
+- **Barcha tumanlar:** kontur soni, indeks yozuvlari, 04 bor-yo'qligi va mos/farqli/faol_emas soni.
+
+Havola bilan aniq tumanni ochish: `http://localhost:8501/?tuman=jomboy_tumani`. Pipeline yangi tuman yozsa —
+chap paneldagi **↻ Fayllarni qayta o'qish**. Usul va muqobillar (Superset, Kepler.gl, QGIS) — [qaror 0011](qarorlar/0011-dashboard.md).
 
 Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)** · To'liq ishga tushirish yo'riqnomasi: **[docs/ISHGA_TUSHIRISH.md](docs/ISHGA_TUSHIRISH.md)**.
 

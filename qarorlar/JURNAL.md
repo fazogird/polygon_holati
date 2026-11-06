@@ -57,6 +57,12 @@
   va haqiqiy XATO ajratildi.
 - 08:30 — Qashqadaryo 18/18 ✅; qolgan 4 tuman 4 terminalda: Payariq (qayta), Pastdarg'om, Qo'shrabot, Paxtachi.
   Eski (qulfni bilmaydigan) Samarqand terminali Pastdarg'om'dan keyin o'ldiriladi (Paxtachi ikki marta hisoblanmasin).
+- **Dashboard** (`scripts/dashboard.py`, `dashboard.bat`) → qaror 0011. Excel bitta konturdan ortig'ida qotardi;
+  Tableau pullik. Streamlit + DuckDB + pydeck: tuman xaritasi (rang: sana bo'yicha indeks, maks. NDVI, ekin turi,
+  04 natijalari), konturni bosish → NDVI/EVI2/NDMI qatori, solishtirish, tuman bo'yicha median egri chiziqlar,
+  barcha tumanlar holati. Pipeline ishlab turgani uchun paketlar alohida `fenologiya_viz` muhitiga o'rnatildi.
+  O'lchov (Jomboy, 15 296 kontur): tuman birinchi ochilishi ~6 s, kontur bosish / rang almashtirish ~1 s.
+  pydeck JSON'i indent bilan 17 MB edi → ixcham JSON ~6 MB.
 
 ### Keyingi himoyalar (run'lar tugagach)
 1. O'qish xatosida kunni 3 marta qayta urinish; baribir bo'lmasa — kun "muvaffaqiyatsiz" deb jurnalga (jim emas).

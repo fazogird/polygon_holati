@@ -21,3 +21,4 @@ kim so'rasa ham "nega shunday qilingan" ga javob shu yerda.
 | [0008](0008-ish-tartibi.md) | Ish tartibi: asosiy run'larni foydalanuvchi qiladi | 2026-11-05 | qabul qilingan |
 | [0009](0009-kop-tuman-pipeline.md) | Ko'p tuman pipeline (davom ettirish), fayl nomlari, ikki repozitoriy | 2026-11-05 | qabul qilingan |
 | [0010](0010-fenologiya-mantiqi.md) | Fenologiya: faol davr (sikl amplitudasidan), mavsumga biriktirish, NDVI suv oylari | 2026-11-05 | qabul qilingan |
+| [0011](0011-dashboard.md) | Vizualizatsiya: Streamlit + DuckDB + pydeck dashboard (lokal, bepul, alohida muhit) | 2026-11-06 | qabul qilingan |

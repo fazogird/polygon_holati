@@ -1,0 +1,15 @@
+# Dashboard muhiti (scripts/dashboard.py) — pipeline muhitidan alohida,
+# ishlab turgan hisob-kitoblarga xalaqit bermasligi uchun.
+name: fenologiya_viz
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - streamlit>=1.39     # pydeck xaritasida bosish (on_select)
+  - duckdb
+  - pydeck
+  - plotly
+  - geopandas
+  - pyogrio
+  - pyarrow
+  - pyyaml
