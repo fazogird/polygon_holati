@@ -9,6 +9,39 @@ hisobiga konturlarni mavsumlari ajratilgan holda tayyorlash uchun.
 Ekin turi aniqlanmaydi — faqat dalaning o'z "ritmi" (fenologiyasi).
 Kirish: `birlamchi_ikkilamchi` loyihasining natijasi (`uniqueid` bilan konturlar).
 
+## Versiyalar (loyiha bosqichlari)
+
+| Versiya | Repozitoriy | Nima qiladi | Natija |
+|---|---|---|---|
+| **v1** | GitHub [`fazogird/birlamchi_ikkilamchi`](https://github.com/fazogird/birlamchi_ikkilamchi) · GitLab `d.nozimov/birlamchi_ikkilamchi_mavsum` | Qishloq xo'jaligi konturlarini **tuzatish**: mavsum (Birlamchi / Ikkilamchi / Mavsumiy), to'liq dalani har mavsumda yopish, fermer ma'lumoti, `uniqueid`, qat'iy suv oylari (3–5 / 6–10 / 3–10) | `ekin_yerlar_toliq.gpkg`, `ekin_yerlar_qisqa.gpkg` |
+| **v2** (shu repozitoriy) | GitHub [`fazogird/polygon_holati`](https://github.com/fazogird/polygon_holati) · GitLab `d.nozimov/dalaga_index_run` | v1 konturlariga **Sentinel-2 indeks** (NDVI, EVI2, NDMI) yozish va dalaning **o'z faol davrini** ajratish → har kontur uchun NDVI bo'yicha suv oylari | `qator_<tuman>.parquet`, `fenologiya_<tuman>.parquet` |
+
+v1 "qishloq yorlig'i qaysi mavsum deydi" savoliga, v2 esa "dala haqiqatan qachon faol bo'lgan" savoliga javob beradi —
+yorliq xato bo'lsa ham suv to'g'ri oylarga yoziladi.
+
+## Natija namunasi — Jomboy tumani (2026, fevral–oktyabr)
+
+![Jomboy NDVI namuna](docs/img/jomboy_ndvi_namuna.png)
+
+*Nuqtalar — Sentinel-2 NDVI (har 2–5 kunda, bulutsiz); qizil chiziq — silliq NDVI; pastdagi qizil tasma — kontur
+mavsumi uchun topilgan faol davr. Fon: yashil — qat'iy Birlamchi oynasi (3–5), sariq — Ikkilamchi (6–10).*
+
+Grafikdan ko'rinadi: bug'doy fevraldan yashil va iyunda o'riladi (NDVI bo'yicha 2–6); "Ikkilamchi" deb belgilangan
+Kartoshka aslida may–iyulda faol (u davr ostidagi "Birlamchi aniqlanmagan" konturga yoziladi — suv ikki marta
+sanalmaydi); "Boshqa" faqat may–iyunda faol; bog' va beda butun mavsum.
+
+| Jomboy, 15 296 kontur | Qat'iy oylarga mos | Farqli | Shu mavsumda faol emas |
+|---|---|---|---|
+| Birlamchi | 3 323 | **859** | **801** |
+| Ikkilamchi | 4 935 | 9 | 456 |
+| Mavsumiy | 4 770 | 1 | 29 |
+
+Eng ko'p uchraydigan NDVI oylari: Birlamchi **2–6** (qat'iy 3–5), Ikkilamchi **8–10 / 7–10** (qat'iy 6–10),
+Mavsumiy 3–10. Usul — [qaror 0010](qarorlar/0010-fenologiya-mantiqi.md).
+
+**Hisob hajmi (4 viloyat):** 70 tuman, 540 194 kontur, tuman boshiga 51–105 Sentinel-2 kuni; 4–6 parallel
+terminalda bir kecha (batafsil — [jurnal](qarorlar/JURNAL.md), [yo'riqnoma](docs/ISHGA_TUSHIRISH.md)).
+
 ## Tamoyillar
 - Konturlar **kompyuterdan chiqmaydi**: sun'iy yo'ldosh tasvirlari ochiq STAC/COG manbalardan oqim bilan o'qiladi,
   hisob lokal (yoki tashkilotning o'z AWS serverida).
@@ -22,7 +55,7 @@ src/fenologiya/  kutubxona: STAC qidiruv, o'qish, indekslar, zonal statistika, f
 scripts/     pipeline qadamlari (00_ ... 0N_)
 data/        kirish/ oraliq/ natija/   (gitga kirmaydi)
 logs/        jurnallar                 (gitga kirmaydi)
-tests/       testlar (test_indeks, test_bufer)
+tests/       testlar (test_indeks, test_bufer, test_fen)
 qarorlar/    qabul qilingan qarorlar va jarayon jurnali
 docs/        hujjat va rasmlar
 env/         conda muhit tavsifi

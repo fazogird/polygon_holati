@@ -36,7 +36,7 @@ def tanla(k, q, n_max=9, seed=1):
     return out
 
 
-def chiz(k, q, ids, yil, out, fen=None, sil=None):
+def chiz(k, q, ids, yil, out, fen=None, sil=None, anonim=False):
     n = len(ids); cols = 3; rows = int(np.ceil(n / cols))
     fig, axs = plt.subplots(rows, cols, figsize=(5.2 * cols, 3.2 * rows), dpi=130, squeeze=False, sharey=True)
     for ax in axs.ravel()[n:]:
@@ -61,7 +61,8 @@ def chiz(k, q, ids, yil, out, fen=None, sil=None):
         else:
             ax.plot(d.sana, d.ndvi.rolling(3, center=True, min_periods=1).median(), color="#2F5597", lw=1.4, zorder=2)
         ax.set_ylim(-0.1, 1.0); ax.grid(alpha=0.3)
-        ax.set_title(f"{r.turi} | {r.mavsum} | {r.maydon:.1f} ga{sarlavha2}\n{uid[:8]}…  ({len(d)} kuzatuv)", fontsize=8)
+        idq = "" if anonim else f"{uid[:8]}…  "
+        ax.set_title(f"{r.turi} | {r.mavsum} | {r.maydon:.1f} ga{sarlavha2}\n{idq}({len(d)} kuzatuv)", fontsize=8)
         ax.tick_params(labelsize=7)
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%m"))
     fig.suptitle("NDVI (Sentinel-2, 10 m) — yashil fon: Birlamchi (3–5), sariq: Ikkilamchi (6–10)", fontsize=10)
@@ -74,18 +75,20 @@ def main():
     ap.add_argument("--tuman", required=True)
     ap.add_argument("--uniqueid", nargs="*")
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--anonim", action="store_true", help="kontur ID larsiz (README / ommaviy hujjat uchun)")
+    ap.add_argument("--chiqish", help="chiqish fayli (standart: data/natija/grafik_<tuman>_<vaqt>.png)")
     a = ap.parse_args()
     sl = S.slug(a.tuman); s = S.yuklash()
     k = pyogrio.read_dataframe(S.yol("data", "kirish", f"konturlar_{sl}.gpkg"), layer="konturlar", read_geometry=False)
     q = pd.read_parquet(S.yol("data", "oraliq", f"qator_{sl}.parquet"))
     ids = a.uniqueid or tanla(k, q, seed=a.seed)
-    out = S.yol("data", "natija", f"grafik_{sl}_{datetime.datetime.now():%Y%m%d_%H%M%S}.png")
-    os.makedirs(os.path.dirname(out), exist_ok=True)
+    out = a.chiqish or S.yol("data", "natija", f"grafik_{sl}_{datetime.datetime.now():%Y%m%d_%H%M%S}.png")
+    os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     fp, sp = S.yol("data", "natija", f"fenologiya_{sl}.parquet"), S.yol("data", "oraliq", f"silliq_{sl}.parquet")
     fen = pd.read_parquet(fp) if os.path.exists(fp) else None
     sil = pd.read_parquet(sp) if os.path.exists(sp) else None
-    chiz(k, q, ids, s["davr"]["boshi"][:4], out, fen, sil)
-    print(f"{len(ids)} kontur: {[(k.loc[k.uniqueid == i, 'turi'].iloc[0], i) for i in ids]}\n-> {out}")
+    chiz(k, q, ids, s["davr"]["boshi"][:4], out, fen, sil, anonim=a.anonim)
+    print(f"{len(ids)} kontur" + ("" if a.anonim else f": {[(k.loc[k.uniqueid == i, 'turi'].iloc[0], i) for i in ids]}") + f"\n-> {out}")
 
 
 if __name__ == "__main__":
