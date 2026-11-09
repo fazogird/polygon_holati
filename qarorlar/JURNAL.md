@@ -58,6 +58,31 @@
 - 08:30 — Qashqadaryo 18/18 ✅; qolgan 4 tuman 4 terminalda: Payariq (qayta), Pastdarg'om, Qo'shrabot, Paxtachi.
   Eski (qulfni bilmaydigan) Samarqand terminali Pastdarg'om'dan keyin o'ldiriladi (Paxtachi ikki marta hisoblanmasin).
 
+- **04d zona kalendari** (`config/zonalar.yaml`, `scripts/04d_zona_kalendar.py`) — 69 tuman. Oy qoidasi: oyda faol
+  maydonning ≥50% i ≥10 kun yashil; fevral tashlandi; iyun Birlamchida, iyuldan Ikkilamchi; ekiladigan ekinlarga
+  NDVI'dan bir oy oldin. Foydalanuvchi bilan kelishildi, Paxta — butun ekin **3-10** (ekish oldi sug'orish).
+- **05 suv oylari** (`config/suv_oylari.yaml`, `scripts/05_suv_oylari.py`): toliq/qisqa GPKG nusxasida FAQAT
+  `suv_boshi`/`suv_oxiri` SQL UPDATE bilan yangilanadi (geometriya va boshqa ustunlar tegilmaydi — sinovda 0 farq).
+  Foydalanuvchi qoidasi: Ikkilamchi (aniqlanmagan ham — bo'sh emas) shu daladagi Birlamchi tugagan oydan keyin
+  boshlanib 10-oygacha (3-5 → 6-10); Mavsumiy hammasi 3-10, ostida Birlamchi bo'lsa undan keyin (Paxta ostidagi
+  Ozuqa 3-4 → Paxta 5-10). Bitta dala = kesishma konturdan birining ≥50% i. Quruq run: 167 774 / 533 060 kontur
+  o'zgaradi; Ikkilamchi 119 377 / 119 378 Birlamchiga bog'landi; ~33 s.
+  Foydalanuvchi so'rovi bilan 05 faqat bitta faylda ishlaydi (standart: `ekin_yerlar_qisqa.gpkg`, `season` ustuni);
+  chiqish kirish yonida `ekin_yerlar_qisqa_v2_fenologiya.gpkg` (+ `_ozgarish.csv`). Natija to'liq fayl asosidagi
+  run bilan bir xil (sinovda 0 farq).
+
+## 2026-11-09
+- Birlamchi hammasi 3-oydan (ekish oldi sug'orish) — foydalanuvchi tasdiqladi.
+- **v3**: Ozuqa/Bug'doy ustidagi Paxta (bitta dala, ≥50% kesishma) — Mavsumiy emas, **Ikkilamchi ekin**
+  (`season` ham yangilanadi): 463 kontur, 7 184 ga; ostidagi Birlamchi 447 → 3-4, Paxta → 5-10.
+  Hisob `src/fenologiya/suv.py` ga ko'chirildi; `05_suv_oylari.py --versiya v3` (standart) va
+  `notebooks/suv_oylari.ipynb` (qadamma-qadam + tekshiruv). Chiqish: `ekin_yerlar_qisqa_v3_fenologiya.gpkg`.
+  Sinov (Sardoba + Jomboy): suv/season dan boshqa farq 0.
+- **Birlamchi ↔ Ikkilamchi chegarasi** (v3, to'liq qisqa fayl): aynan bir xil 105 201 juft; deyarli bir xil
+  (IoU ≥ 0.99) 3 609; farq qiladi — Birlamchi 7 205 / Ikkilamchi 11 030 kontur; jufti yo'q — 1 Ikkilamchi.
+- Qarorlar → 0012 (zona kalendari va suv oylari). Dashboard (`dashboard` lokal branch, qaror 0011) master ga
+  qo'shilmadi — foydalanuvchi qarori bilan alohida qoldi.
+
 ### Keyingi himoyalar (run'lar tugagach)
 1. O'qish xatosida kunni 3 marta qayta urinish; baribir bo'lmasa — kun "muvaffaqiyatsiz" deb jurnalga (jim emas).
 2. Faqat muvaffaqiyatsiz kunlarni to'ldirish rejimi (butun tumanni qayta hisoblamasdan).

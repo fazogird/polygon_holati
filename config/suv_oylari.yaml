@@ -1,0 +1,56 @@
+# Suv ichish oylari (05_suv_oylari.py) — [boshi, oxiri], ikkala oy ham kiradi.
+# Asos: 04 NDVI natijasi (69 tuman, 2026), viloyat × zona × ekin turi; 2026-11-06 kelishilgan.
+#
+# 1) Birlamchi — hammasi 3-oydan (ekish oldi sug'orish ham kiradi); tugashi ekin turi bo'yicha (quyida).
+# 2) Bitta dalada Birlamchidan keyingi ekin (Ikkilamchi, shu jumladan "aniqlanmagan", yoki Mavsumiy) —
+#    Birlamchi tugagan oydan keyin boshlanadi va 10-oygacha: Birlamchi 3-5 → 6-10, 3-6 → 7-10.
+# 3) Mavsumiy (Bog', Paxta, Boshqa ...) — 3-10; faqat ostida Birlamchi bo'lsa (2-qoida) kechroq boshlanadi.
+#    Ozuqa yoki Bug'doy ustidagi Paxta — Ikkilamchi ekin (paxta_ikkilamchi, quyida).
+# 4) Birlamchisi topilmagan Ikkilamchi — 7-10.
+#
+# Qidirish tartibi: zona → viloyat → hammasi; har birida avval ekin turi, keyin "_boshqa".
+# Zona nomlari config/zonalar.yaml dagidek. Ekin nomi `turi` ustunidagidek (apostrof ').
+
+hammasi:
+  Birlamchi ekin:
+    _boshqa: [3, 6]                 # Bug'doy, Makka, Kartoshka, Loviya, Piyoz, Tariq ...
+    Ozuqa: [3, 5]
+    Noxot: [3, 6]
+  Ikkilamchi ekin:
+    _boshqa: [7, 10]                # faqat Birlamchisi topilmaganlar uchun
+  Mavsumiy ekin:
+    _boshqa: [3, 10]
+
+viloyat:
+  Farg'ona viloyati:
+    Birlamchi ekin:
+      Birlamchi ekin aniqlanmagan: [3, 6]
+  Qashqadaryo viloyati:
+    Birlamchi ekin:
+      Bug'doy: [3, 5]
+      Birlamchi ekin aniqlanmagan: [3, 6]
+      Poliz ekinlari: [3, 6]
+  Samarqand viloyati:
+    Birlamchi ekin:
+      Birlamchi ekin aniqlanmagan: [3, 6]
+      Sabzi: [3, 6]
+  Sirdaryo viloyati:
+    Birlamchi ekin:
+      Birlamchi ekin aniqlanmagan: [3, 6]
+
+zona:
+  "Samarqand — Tog'li":
+    Birlamchi ekin:
+      Bug'doy: [3, 5]
+
+# 2-qoida: kesishma konturlardan birining maydonining ≥ min_ulush qismi bo'lsa — bitta dala.
+ketma_ket:
+  min_ulush: 0.5
+  oxiri: 10
+
+# v3: Ozuqa yoki Bug'doy ustidagi Paxta (bitta dala) — Mavsumiy emas, IKKILAMCHI ekin (season ustuni ham o'zgaradi).
+# Ostidagi Birlamchi: NDVI bo'yicha aprel boshida tugaydi → 3-4; Paxta (endi Ikkilamchi) → 5-10 (2-qoida).
+# O'chirish: paxta_ikkilamchi: null  (unda Paxta Mavsumiy qoladi va Birlamchidan keyin boshlanadi)
+paxta_ikkilamchi:
+  ostidagi: [Ozuqa, "Bug'doy"]
+  birlamchi: [3, 4]

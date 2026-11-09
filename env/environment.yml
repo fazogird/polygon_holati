@@ -22,3 +22,5 @@ dependencies:
   - pyyaml
   - requests
   - tqdm
+  - openpyxl            # 04d Excel
+  - ipykernel           # notebooks/

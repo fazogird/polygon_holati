@@ -1,0 +1,91 @@
+# Agroiqlim zonalari — viloyat ichida bo'linma (04d_zona_kalendar.py)
+# Tuman nomlari ma'lumotdagi `tuman` ustuni bilan AYNAN bir xil bo'lishi kerak.
+# Ro'yxatda yo'q tuman "<viloyat> — belgilanmagan" zonasiga tushadi (skript ogohlantiradi).
+# Farg'ona va Samarqand bo'linmasi — TAKLIF (joylashuv bo'yicha), agronom bilan tekshiring.
+
+Qashqadaryo viloyati:
+  "Qashqadaryo — G'arb":           # foydalanuvchi ko'rsatmasi
+    - Mirishkor tumani
+    - Muborak tumani
+    - Kasbi tumani
+    - Nishon tumani
+    - Qarshi tumani
+    - Qarshi shahri
+    - Qarshi
+    - Koson tumani
+  #  - Ko'kdala tumani             # TEKSHIRING: Koson va Chiroqchi orasida, cho'l qismi — G'arbga qo'yildi
+  "Qashqadaryo — Sharq":
+    - G'uzor tumani
+    - Qamashi tumani
+    - Chiroqchi tumani
+    - Yakkabog' tumani
+    - Dehqonobod tumani
+    - Kitob tumani
+    - Shahrisabz tumani
+    - Shahrisabz shahri
+    - Shahrisabz
+    - Ko'kdala tumani 
+
+Farg'ona viloyati:
+  "Farg'ona — G'arb (Qo'qon tomoni)":     # TAKLIF
+    - Beshariq tumani
+    - Furqat tumani
+    - Dang'ara tumani
+    - O'zbekiston tumani
+    - Qo'qon shahri
+    - Uchko'prik tumani
+    - Buvayda tumani
+    - Bog'dod tumani
+    - Rishton tumani
+  #  - So'x tumani                 # TEKSHIRING: tog'li eksklav
+  "Farg'ona — Sharq (Farg'ona–Marg'ilon tomoni)":
+    - Oltiariq tumani
+    - Qo'shtepa tumani
+    - Yozyovon tumani
+    - Marg'ilon shahri
+    - Marg'ilon shahar
+    - Farg'ona tumani
+    - Farg'ona shahri
+    - Toshloq tumani
+    - Quvasoy shahri
+    - Quva tumani
+
+Samarqand viloyati:
+  "Samarqand — G'arb (Kattaqo'rg'on tomoni)":   # TAKLIF
+    - Paxtachi tumani
+    - Narpay tumani
+    - Kattaqo'rg'on tumani
+    - Kattaqo'rg'on shahri
+    - Kattaqo'rg'on
+    - Ishtixon tumani
+  "Samarqand — Markaz (Samarqand vohasi)":
+    - Pastdarg'om tumani
+    - Oqdaryo tumani
+    - Payariq tumani
+    - Samarqand tumani
+    - Samarqand shahri
+    - Samarqand
+    - Jomboy tumani
+    - Tayloq tumani
+    - Urgut tumani
+    - Bulung'ur tumani
+  "Samarqand — Tog'li":
+    - Nurobod tumani
+    - Qo'shrabot tumani
+
+Sirdaryo viloyati:
+  "Sirdaryo":
+    - Sardoba tumani
+    - Oqoltin tumani
+    - Mirzaobod tumani
+    - Sirdaryo tumani
+    - Xovos tumani
+    - Guliston
+    - Guliston shahri
+    - Guliston tumani
+    - Yangiyer shahri
+    - Yangiyer
+    - Sayxunobod tumani
+    - Boyovut tumani
+    - Shirin
+    - Shirin shahri

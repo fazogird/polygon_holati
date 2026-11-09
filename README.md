@@ -15,6 +15,7 @@ Kirish: `birlamchi_ikkilamchi` loyihasining natijasi (`uniqueid` bilan konturlar
 |---|---|---|---|
 | **v1** | GitHub [`fazogird/birlamchi_ikkilamchi`](https://github.com/fazogird/birlamchi_ikkilamchi) · GitLab `d.nozimov/birlamchi_ikkilamchi_mavsum` | Qishloq xo'jaligi konturlarini **tuzatish**: mavsum (Birlamchi / Ikkilamchi / Mavsumiy), to'liq dalani har mavsumda yopish, fermer ma'lumoti, `uniqueid`, qat'iy suv oylari (3–5 / 6–10 / 3–10) | `ekin_yerlar_toliq.gpkg`, `ekin_yerlar_qisqa.gpkg` |
 | **v2** (shu repozitoriy) | GitHub [`fazogird/polygon_holati`](https://github.com/fazogird/polygon_holati) · GitLab `d.nozimov/dalaga_index_run` | v1 konturlariga **Sentinel-2 indeks** (NDVI, EVI2, NDMI) yozish va dalaning **o'z faol davrini** ajratish → har kontur uchun NDVI bo'yicha suv oylari | `qator_<tuman>.parquet`, `fenologiya_<tuman>.parquet` |
+| **v3** (shu repozitoriy, 05) | — | NDVI kalendaridan kelishilgan **suv oylari** v1 qisqa fayliga: Birlamchi 3-4/3-5/3-6, Ikkilamchi undan keyin …-10, Mavsumiy 3-10; Ozuqa/Bug'doy ustidagi Paxta → Ikkilamchi. Geometriya va boshqa atributlar o'zgarmaydi | `ekin_yerlar_qisqa_v3_fenologiya.gpkg` |
 
 v1 "qishloq yorlig'i qaysi mavsum deydi" savoliga, v2 esa "dala haqiqatan qachon faol bo'lgan" savoliga javob beradi —
 yorliq xato bo'lsa ham suv to'g'ri oylarga yoziladi.
@@ -53,6 +54,7 @@ terminalda bir kecha (batafsil — [jurnal](qarorlar/JURNAL.md), [yo'riqnoma](do
 config/      sozlamalar.yaml — manba, sana oralig'i, indekslar, bulut chegarasi
 src/fenologiya/  kutubxona: STAC qidiruv, o'qish, indekslar, zonal statistika, fenologiya
 scripts/     pipeline qadamlari (00_ ... 0N_)
+notebooks/   suv_oylari.ipynb — 05 qadamma-qadam (kernel: fenologiya, ipykernel kerak)
 data/        kirish/ oraliq/ natija/   (gitga kirmaydi)
 logs/        jurnallar                 (gitga kirmaydi)
 tests/       testlar (test_indeks, test_bufer, test_fen)
@@ -72,7 +74,10 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 | 03b | `03b_grafik.py` | namunaviy konturlar NDVI grafiklari (tekshirish) | tayyor |
 | 04 | `04_fenologiya.py` | silliqlash, faol sikllar, mavsum bo'yicha faol davr, `suv_boshi_ndvi`/`suv_oxiri_ndvi` | tayyor |
 | 04b | `04b_mos_kelmaganlar.py` | qat'iy oylarga mos kelmagan (`farqli`, `faol_emas`) konturlar — GPKG (ArcGIS) + CSV (Excel) | tayyor |
-| 05 | `05_eksport.py` | ET jamoasi uchun jadval + Tableau uchun uzun format | keyingi |
+| 04c | `04c_kalendar.py` | NDVI ekin kalendari: viloyat × ekin turi × mavsum | tayyor |
+| 04d | `04d_zona_kalendar.py` | zona kalendari (`config/zonalar.yaml`): zona × mavsum × ekin, hozirgi va taklif oylar → Excel | tayyor |
+| 05 | `05_suv_oylari.py` | **v3**: `ekin_yerlar_qisqa.gpkg` → `..._v3_fenologiya.gpkg` — faqat `suv_boshi`/`suv_oxiri` (va Ozuqa/Bug'doy ustidagi Paxta `season` → Ikkilamchi); qoidalar `config/suv_oylari.yaml`, [qaror 0012](qarorlar/0012-zona-kalendari-va-suv-oylari.md) | tayyor |
+| — | `notebooks/suv_oylari.ipynb` | 05 qadamma-qadam + tekshiruv + Birlamchi/Ikkilamchi chegarasi bir xil / farqli soni | tayyor |
 
 Qarorlar va jarayon jurnali: **[qarorlar/](qarorlar/README.md)** · To'liq ishga tushirish yo'riqnomasi: **[docs/ISHGA_TUSHIRISH.md](docs/ISHGA_TUSHIRISH.md)**.
 
