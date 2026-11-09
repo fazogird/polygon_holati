@@ -32,7 +32,10 @@ Natija fayli bor bo'lsa skript to'xtaydi; ustiga yozish uchun `--ustiga-yoz` qo'
 
 - `<chiqish>.gpkg` — hamma eski ustunlar + `hosil` (s/ga, verguldan keyin 2 xona).
 - `<chiqish>_hosil_hisobot.csv` — ekin × viloyat: kontur soni, nechtasiga yozildi,
-  o'rtacha / min / max hosil.
+  maydon (ga), hosil min / max va ikki xil o'rtacha:
+  - `hosil_maydon_vaznli` — **viloyat hosildorligi** shu (katta kontur ko'proq vazn
+    oladi); rasterning o'z o'rtachasi bilan mos keladi;
+  - `hosil_oddiy_ortacha` — konturlarning oddiy o'rtachasi (kichik va katta kontur teng).
 
 Bo'sh qolgan bug'doy/paxta konturlari — raster qoplamaydigan joylar yoki
 raster ichida faqat nodata bo'lgan konturlar.

@@ -115,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
     ekin_ust = cfg.get("ekin_ustuni", "turi")
     vil_ust = cfg.get("viloyat_ustuni", "viloyat")
     nat_ust = cfg.get("natija_ustuni", "hosil")
+    maydon_ust = cfg.get("maydon_ustuni", "maydon")
     yaxlit = int(cfg.get("yaxlitlash", 2))
     rasterlar: dict = cfg["rasterlar"] or {}
 
@@ -157,10 +158,21 @@ def main(argv: list[str] | None = None) -> int:
                 qiymat = zonal_mean(geoms, src)
             hosil[tanla] = qiymat
             yozildi = int(np.isfinite(qiymat).sum())
+            # vazn: maydon ustuni (ga); bo'lmasa geometriya maydoni (raster CRS, metr)
+            if maydon_ust in gdf.columns:
+                maydon = gdf[maydon_ust].iloc[tanla].to_numpy(dtype="float64")
+            else:
+                maydon = geoms.area.to_numpy() / 1e4
+            ok = np.isfinite(qiymat) & np.isfinite(maydon) & (maydon > 0)
             hisobot.append({
                 "ekin": ekin, "viloyat": vil, "kontur": int(tanla.size), "yozildi": yozildi,
                 "bosh_qoldi": int(tanla.size - yozildi),
-                "hosil_ortacha": round(float(np.nanmean(qiymat)), 2) if yozildi else None,
+                "maydon_ga": round(float(np.nansum(maydon[ok])), 1),
+                # viloyat hosildorligi: katta kontur ko'proq vazn oladi
+                "hosil_maydon_vaznli": round(float(np.average(qiymat[ok], weights=maydon[ok])), 2)
+                if ok.any() else None,
+                # konturlarning oddiy o'rtachasi: kichik va katta kontur teng
+                "hosil_oddiy_ortacha": round(float(np.nanmean(qiymat)), 2) if yozildi else None,
                 "hosil_min": round(float(np.nanmin(qiymat)), 2) if yozildi else None,
                 "hosil_max": round(float(np.nanmax(qiymat)), 2) if yozildi else None,
                 "raster": rp,

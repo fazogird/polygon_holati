@@ -9,13 +9,14 @@
 # Kirish vektor fayli (o'zgarmaydi, faqat o'qiladi)
 kirish: D:/Tasks/bir_ikki_lamchi/natija/ekin_yerlar_qisqa_v2_fenologiya_v3_fenologiya.gpkg
 # Natija: kirishdagi hamma narsa + bitta yangi ustun
-chiqish: D:/Tasks/bir_ikki_lamchi/natija/ekin_yerlar_qisqa_v2_fenologiya_v4.gpkg
+chiqish: D:/Tasks/bir_ikki_lamchi/natija/ekin_yerlar_qisqa_v4.gpkg
 qatlam: ekin_yerlar
 
 # Ustunlar
 ekin_ustuni: turi          # ekin turi qaysi ustunda
 viloyat_ustuni: viloyat    # viloyat qaysi ustunda
 natija_ustuni: hosil       # yangi ustun nomi (s/ga, konturdagi piksellar o'rtachasi)
+maydon_ustuni: maydon      # hisobotdagi maydon-vaznli o'rtacha uchun (ga); yo'q bo'lsa geometriyadan
 yaxlitlash: 2              # verguldan keyin nechta raqam
 
 # Rasterlar: ekin turi (turi ustunidagi qiymat) -> viloyat -> raster yo'li.
