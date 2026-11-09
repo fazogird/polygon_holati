@@ -57,6 +57,12 @@
   va haqiqiy XATO ajratildi.
 - 08:30 — Qashqadaryo 18/18 ✅; qolgan 4 tuman 4 terminalda: Payariq (qayta), Pastdarg'om, Qo'shrabot, Paxtachi.
   Eski (qulfni bilmaydigan) Samarqand terminali Pastdarg'om'dan keyin o'ldiriladi (Paxtachi ikki marta hisoblanmasin).
+- **Dashboard** (`scripts/dashboard.py`, `dashboard.bat`) → qaror 0011. Excel bitta konturdan ortig'ida qotardi;
+  Tableau pullik. Streamlit + DuckDB + pydeck: tuman xaritasi (rang: sana bo'yicha indeks, maks. NDVI, ekin turi,
+  04 natijalari), konturni bosish → NDVI/EVI2/NDMI qatori, solishtirish, tuman bo'yicha median egri chiziqlar,
+  barcha tumanlar holati. Pipeline ishlab turgani uchun paketlar alohida `fenologiya_viz` muhitiga o'rnatildi.
+  O'lchov (Jomboy, 15 296 kontur): tuman birinchi ochilishi ~6 s, kontur bosish / rang almashtirish ~1 s.
+  pydeck JSON'i indent bilan 17 MB edi → ixcham JSON ~6 MB.
 
 - **04d zona kalendari** (`config/zonalar.yaml`, `scripts/04d_zona_kalendar.py`) — 69 tuman. Oy qoidasi: oyda faol
   maydonning ≥50% i ≥10 kun yashil; fevral tashlandi; iyun Birlamchida, iyuldan Ikkilamchi; ekiladigan ekinlarga
@@ -80,8 +86,10 @@
   Sinov (Sardoba + Jomboy): suv/season dan boshqa farq 0.
 - **Birlamchi ↔ Ikkilamchi chegarasi** (v3, to'liq qisqa fayl): aynan bir xil 105 201 juft; deyarli bir xil
   (IoU ≥ 0.99) 3 609; farq qiladi — Birlamchi 7 205 / Ikkilamchi 11 030 kontur; jufti yo'q — 1 Ikkilamchi.
-- Qarorlar → 0012 (zona kalendari va suv oylari). Dashboard (`dashboard` lokal branch, qaror 0011) master ga
-  qo'shilmadi — foydalanuvchi qarori bilan alohida qoldi.
+- Qarorlar → 0012 (zona kalendari va suv oylari). Dashboard (`dashboard` lokal branch, qaror 0011) avval
+  alohida push qilindi, so'ng foydalanuvchi so'rovi bilan master ga birlashtirildi va ikkala repoga push qilindi.
+- 05 standart kirishi foydalanuvchi tomonidan `ekin_yerlar_qisqa_v2_fenologiya.gpkg` ga o'zgartirildi; notebook
+  to'liq run natijalari bilan saqlandi.
 
 ### Keyingi himoyalar (run'lar tugagach)
 1. O'qish xatosida kunni 3 marta qayta urinish; baribir bo'lmasa — kun "muvaffaqiyatsiz" deb jurnalga (jim emas).
