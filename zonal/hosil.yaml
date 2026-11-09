@@ -1,0 +1,34 @@
+# ===================================================================
+#  Hosildorlik rasterlarini konturlarga yozish (zonal mean).
+#  Ishga tushirish (loyiha ildizidan):
+#    .\run.bat zonal\hosil_zonal.py
+#    .\run.bat zonal\hosil_zonal.py --config zonal\hosil.yaml
+#  Yo'llarni shu faylda o'zgartiring yoki --kirish / --chiqish bilan bering.
+# ===================================================================
+
+# Kirish vektor fayli (o'zgarmaydi, faqat o'qiladi)
+kirish: D:/Tasks/bir_ikki_lamchi/natija/ekin_yerlar_qisqa_v2_fenologiya_v3_fenologiya.gpkg
+# Natija: kirishdagi hamma narsa + bitta yangi ustun
+chiqish: D:/Tasks/bir_ikki_lamchi/natija/ekin_yerlar_qisqa_v2_fenologiya_v4.gpkg
+qatlam: ekin_yerlar
+
+# Ustunlar
+ekin_ustuni: turi          # ekin turi qaysi ustunda
+viloyat_ustuni: viloyat    # viloyat qaysi ustunda
+natija_ustuni: hosil       # yangi ustun nomi (s/ga, konturdagi piksellar o'rtachasi)
+yaxlitlash: 2              # verguldan keyin nechta raqam
+
+# Rasterlar: ekin turi (turi ustunidagi qiymat) -> viloyat -> raster yo'li.
+# Bu yerda yo'q ekin/viloyat konturlarida `hosil` bo'sh qoladi.
+# Viloyatni o'chirish uchun qator boshiga # qo'ying.
+rasterlar:
+  Paxta:
+    "Farg'ona viloyati":    "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/0409/Fargona_YLD_paxta_0904.tif"
+    "Qashqadaryo viloyati": "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/0409/Qashqadaryo_YLD_paxta_0904.tif"
+    "Samarqand viloyati":   "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/0409/Samarqand_YLD_paxta_0904.tif"
+    "Sirdaryo viloyati":    "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/0409/Sirdaryo_YLD_paxta_0904.tif"
+  "Bug'doy":
+    "Farg'ona viloyati":    "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/bugdoy/fargona/yld.tif"
+    "Qashqadaryo viloyati": "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/bugdoy/qashqadaryo/yld.tif"
+    "Samarqand viloyati":   "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/bugdoy/samarqand/Samarqand yld"
+    "Sirdaryo viloyati":    "R:/04-ANALITIKA/Evapotranspiration/Hosildorlik paxta rastr/bugdoy/Sirdaryo/yld.tif"
