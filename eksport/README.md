@@ -52,7 +52,20 @@ Qo'shimcha parametrlar:
 
 - `--chiqish PAPKA` — boshqa papkaga yozish;
 - `--ustiga-yoz` — shp lar bor bo'lsa ham qayta yozish (aks holda skript to'xtaydi);
-- `--viloyat-ustuni`, `--qatlam` — ustun/qatlam nomi boshqacha bo'lsa.
+- `--viloyat-ustuni`, `--qatlam` — ustun/qatlam nomi boshqacha bo'lsa;
+- `--nom ESKI=YANGI` — shp da yana bir ustunni boshqa nom bilan yozish (bir necha marta berish mumkin);
+- `--nomlamasdan` — standart nomlash ishlatilmasin, ustunlar gpkg dagi nomi bilan qoladi.
+
+Standart nomlash (skript boshidagi `SHP_NOMLAR`; gpkg o'zgarmaydi, faqat shp da):
+
+| gpkg | shp |
+|---|---|
+| `uniqueid` | `unique_id` |
+| `season` | `mavsum` |
+| `turi` | `crop` |
+| `hosil` | `yield` |
+
+Nomlashdan keyin ikki ustun bir xil nomga tushsa, skript to'xtaydi.
 
 Oxirida yozilgan konturlar soni kirishdagi bilan solishtiriladi.
 Shp cheklovlari: ustun nomi 10 belgigacha, fayl 2 GB gacha — skript ikkalasini ham ogohlantiradi.

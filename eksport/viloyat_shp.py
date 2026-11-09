@@ -5,13 +5,16 @@ Har bir viloyat (`viloyat` ustunidagi qiymat) o'z shp fayliga yoziladi:
                                                    qashqadaryo_viloyati.shp
                                                    samarqand_viloyati.shp
                                                    sirdaryo_viloyati.shp
-Hamma ustunlar va CRS o'zgarmaydi. Matn UTF-8 (.cpg fayli bilan) yoziladi.
+Hamma ustunlar va CRS saqlanadi; ba'zi ustunlar shp da boshqa nom oladi (SHP_NOMLAR,
+masalan uniqueid -> unique_id). Matn UTF-8 (.cpg fayli bilan) yoziladi.
 Kirish fayli o'zgarmaydi.
 
 Ishga tushirish (loyiha ildizidan):
-    .\\run.bat eksport\\viloyat_shp.py D:\\...\\ekin_yerlar_qisqa_v4.gpkg
+    .\\run.bat eksport\\viloyat_shp.py D:\\...\\ekin_yerlar_qisqa_v5.gpkg
     .\\run.bat eksport\\viloyat_shp.py            (fayl yo'lini so'raydi)
     .\\run.bat eksport\\viloyat_shp.py A.gpkg --chiqish D:\\boshqa\\papka --ustiga-yoz
+    .\\run.bat eksport\\viloyat_shp.py A.gpkg --nom tuman=district   (qo'shimcha / boshqa nom)
+    .\\run.bat eksport\\viloyat_shp.py A.gpkg --nomlamasdan          (gpkg nomlari bilan)
 """
 
 from __future__ import annotations
@@ -30,6 +33,15 @@ import pyogrio  # noqa: E402
 
 SHP_QOSHIMCHA = (".shp", ".shx", ".dbf", ".prj", ".cpg", ".qix", ".sbn", ".sbx")
 SHP_CHEGARA = 2 * 1024**3  # shapefile .shp/.dbf 2 GB dan oshmasligi kerak
+
+# shp da ustun nomini o'zgartirish: {gpkg dagi nomi: shp dagi nomi} (10 belgigacha).
+# gpkg da bo'lmagan ustun e'tiborsiz qoladi.
+SHP_NOMLAR = {
+    "uniqueid": "unique_id",
+    "season": "mavsum",
+    "turi": "crop",
+    "hosil": "yield",
+}
 
 
 def log(msg: str) -> None:
@@ -58,6 +70,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--qatlam", help="gpkg qatlami (standart: birinchisi)")
     ap.add_argument("--viloyat-ustuni", default="viloyat", help="viloyat nomi qaysi ustunda")
     ap.add_argument("--ustiga-yoz", action="store_true", help="shp lar bor bo'lsa ham ustiga yozish")
+    ap.add_argument("--nom", action="append", default=[], metavar="ESKI=YANGI",
+                    help="shp da ustun nomini o'zgartirish (SHP_NOMLAR ga qo'shiladi); bir necha marta berish mumkin")
+    ap.add_argument("--nomlamasdan", action="store_true", help="SHP_NOMLAR ishlatilmasin (faqat --nom)")
     a = ap.parse_args(argv)
 
     kirish_str = a.kirish or input("gpkg fayl yo'li: ").strip().strip('"')
@@ -71,7 +86,24 @@ def main(argv: list[str] | None = None) -> int:
     info = pyogrio.read_info(kirish, layer=qatlam)
     if vil_ust not in list(info["fields"]):
         sys.exit(f"'{vil_ust}' ustuni yo'q. Bor ustunlar: {list(info['fields'])}")
-    uzun = [f for f in info["fields"] if len(f) > 10]
+    maydonlar = list(info["fields"])
+    nomlar_map = {} if a.nomlamasdan else dict(SHP_NOMLAR)
+    for s in a.nom:
+        if "=" not in s:
+            sys.exit(f"--nom ESKI=YANGI ko'rinishida bo'lsin: {s}")
+        eski, yangi = (x.strip() for x in s.split("=", 1))
+        nomlar_map[eski] = yangi
+    yoq = [e for e in nomlar_map if e not in maydonlar]
+    if yoq:
+        log(f"Diqqat: gpkg da yo'q, nomlanmaydi: {yoq}")
+    nomlar_map = {e: y for e, y in nomlar_map.items() if e in maydonlar and e != y}
+    shp_ustunlar = [nomlar_map.get(f, f) for f in maydonlar]
+    takror = sorted({c for c in shp_ustunlar if [x.lower() for x in shp_ustunlar].count(c.lower()) > 1})
+    if takror:
+        sys.exit(f"Nomlashdan keyin ustun nomi takrorlanadi: {takror}  (nomlar: {nomlar_map})")
+    if nomlar_map:
+        log("shp da nomlanadi: " + ", ".join(f"{e} -> {y}" for e, y in nomlar_map.items()))
+    uzun = [f for f in shp_ustunlar if len(f) > 10]
     if uzun:
         log(f"Diqqat: shp da ustun nomi 10 belgigacha qisqaradi: {uzun}")
 
@@ -95,6 +127,7 @@ def main(argv: list[str] | None = None) -> int:
         t0 = time.time()
         v_sql = v.replace("'", "''")
         gdf = pyogrio.read_dataframe(kirish, layer=qatlam, where=f"\"{vil_ust}\" = '{v_sql}'")
+        gdf = gdf.rename(columns=nomlar_map)
         asos = chiqish / f"{nomlar[v]}.shp"
         shp_ochir(asos)
         pyogrio.write_dataframe(gdf, asos, driver="ESRI Shapefile", encoding="UTF-8")
