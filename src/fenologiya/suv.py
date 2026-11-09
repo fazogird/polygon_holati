@@ -25,7 +25,7 @@ def sozlamalar():
 
 
 def standart_kirish():
-    return os.path.join(os.path.dirname(S.kirish_yoli(S.yuklash())), "ekin_yerlar_qisqa.gpkg")
+    return os.path.join(os.path.dirname(S.kirish_yoli(S.yuklash())), "ekin_yerlar_qisqa_v2_fenologiya.gpkg")
 
 
 def oqi(gpkg):
