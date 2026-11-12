@@ -67,7 +67,20 @@ Har ishga tushirishda `HISOBOT` ga yoziladi (Excel da ochiq bo'lsa yozilmaydi �
 | **Moslik** | moslik ulushi oraliqlari (≥ 0.99, 0.90–0.99, …, kesishma yo'q) bo'yicha konturlar soni; nechtasi bir nechta manba bo'lagidan yig'ilgan |
 | **Tumanlar** | har tuman: kontur soni va maydoni, mos topilgan / bo'sh qolgan soni va maydoni, `full_name` to'ldirilishi |
 | **Bo'sh qolganlar** | ma'lumot o'tmagan konturlar ro'yxati (FID, unique_id, tuman, maydon, sabab) |
-| **Shubhali** | ikki guruh deyarli teng ulushda bo'lgan konturlar (nomenklatura va `fermer_nom` alohida): olingan va 2-guruh qiymatlari yonma-yon |
+| **Shubhali** | ikki guruh deyarli teng ulushda bo'lgan konturlar (nomenklatura va fermer nomi alohida): **Farqli ustunlar** (qaysi ustun ikki guruhda har xil, masalan `kontur_raq` yoki `kontur_raq, real_n2`), olingan va 2-guruh qiymatlari yonma-yon. "Umumiy" da farqli ustunlar bo'yicha soni |
+
+### Shubhali dala nimani bildiradi
+
+Bizning dala manbadagi ikki dalaning o'rtasida yotsa va ikkala guruh ulushi deyarli teng bo'lsa
+(masalan 0.501 / 0.499), skript kattasini oladi va dalani "Shubhali" ga yozadi. "Farqli ustunlar"
+qaysi qiymat aniq emasligini ko'rsatadi:
+
+- **faqat `kontur_raq`** — `real_name`, `real_n1`, `real_n2` ikkala guruhda bir xil, ular aniq;
+  faqat qaysi kontur raqami yozilgani ikkilanadi (dala ikki manba konturini teng bo'lib turadi).
+- **`kontur_raq` + `real_*`** — nomenklatura darajasi ham har xil: shularni xaritada ko'rib chiqing.
+
+Farg'ona misoli (2026-11-12): 22 nomenklatura shubhalisidan 16 tasi faqat `kontur_raq`,
+3 tasi `kontur_raq, real_n2`, 3 tasi `kontur_raq, real_n1, real_n2`; `real_name` farqi yo'q.
 
 ### Misol: Sirdaryo viloyati (2026-11-09)
 

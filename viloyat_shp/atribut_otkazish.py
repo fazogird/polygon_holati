@@ -26,29 +26,37 @@ from __future__ import annotations
 # =====================================================================================
 
 # Ma'lumot qabul qiladigan shp (bizning viloyat fayli). O'zgarmaydi.
-KIRISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v5_viloyatlar_shp\sirdaryo_viloyati.shp"
+KIRISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v5_viloyatlar_shp\fargona_viloyati.shp"
 
 # Ma'lumot olinadigan to'liq atributli shp. O'zgarmaydi (faqat o'qiladi).
-MANBA = r"D:\Tasks\level_otkazish\LVL_6ekin\LVL_6ekin.shp"
+MANBA = r"D:\Tasks\level_otkazish\far_ekinyer\far_ekinyer\far_ekin2025.shp"
 
 # Natija shp (yangi fayl; KIRISH yoki MANBA bilan bir xil bo'lishi mumkin emas).
-CHIQISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v6_viloyatlar_shp\sirdaryo_viloyati_attributola.shp"
+CHIQISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v6_viloyatlar_shp\fargona_viloyati_v2.shp"
 
 # Excel hisobot. None — CHIQISH yonida "<chiqish nomi>_hisobot.xlsx".
 HISOBOT = None
 
 # MANBA dan olinadigan ustunlar: {manbadagi nomi: bizdagi yangi nomi} (shp: 10 belgigacha).
+# USTUNLAR = {
+#     "ID": "kontur_raq",
+#     "LVL_0_name": "real_name",
+#     "LVL_1_name": "real_n1",
+#     "LVL_2_name": "real_n2",
+# }
+
+# version 2
 USTUNLAR = {
-    "ID": "kontur_raq",
-    "LVL_0_name": "real_name",
-    "LVL_1_name": "real_n1",
-    "LVL_2_name": "real_n2",
+    "kontur_raq": "kontur_raq",
+    "real_name": "real_name",
+    "real_n1": "real_n1",
+    "real_n2": "real_n2",
 }
 
 # Fermer nomi: bizdagi bo'sh FERMER_BIZDA katakchalari MANBA dagi FERMER_MANBADA dan to'ldiriladi.
 # To'ldirmaslik uchun ikkalasini ham None qiling.
 FERMER_BIZDA = "full_name"
-FERMER_MANBADA = "fermer_nom"
+FERMER_MANBADA = "full_name"
 
 # Moslik chegarasi: kesishma / bizning kontur maydoni. 0.5 = kontur kamida yarmi bilan
 # manba konturi ichida bo'lishi shart. Kattaroq qiymat — xavfsizroq, lekin kamroq to'ladi.
@@ -382,6 +390,20 @@ def main() -> int:
     def ga(x) -> float:
         return round(float(np.nansum(x)), 2)
 
+    def farqli_ustunlar(m_df: pd.DataFrame, maska: pd.Series, ust: list[str], nomlar: dict) -> np.ndarray:
+        """Olingan va 2-guruh qiymatlari farq qiladigan ustunlar (bizdagi nomlari bilan), masalan
+        "kontur_raq" yoki "kontur_raq, real_n2"."""
+        if m_df is None or not maska.any():
+            return np.array([], dtype=object)
+        v1 = olinadi.iloc[m_df.loc[maska, "m_qator"].values][ust].fillna("").astype(str).values
+        v2 = olinadi.iloc[m_df.loc[maska, "m_qator2"].values][ust].fillna("").astype(str).values
+        return np.array([", ".join(nomlar.get(c, c) for c, f in zip(ust, qator) if f)
+                         for qator in (v1 != v2)], dtype=object)
+
+    nom_farq = farqli_ustunlar(mos, sh_nom, list(USTUNLAR), USTUNLAR)
+    fer_farq = farqli_ustunlar(fmos, sh_fer, [FERMER_MANBADA], {FERMER_MANBADA: FERMER_BIZDA}) if fermer else None
+    nom_farq_soni = pd.Series(nom_farq, dtype=object).value_counts()
+
     umumiy = pd.DataFrame([
         ("Sana", boshlanish, ""),
         ("— FAYLLAR —", "", ""),
@@ -423,6 +445,9 @@ def main() -> int:
         (f"   shundan: kesishma bor, lekin ulush < {MIN_ULUSH}", int(ulush_past.sum()), ""),
         ("Deyarli teng 2 guruh — nomenklatura (shubhali)", int(sh_nom.sum()),
          f"ikkinchi guruh ulushi ≥ {TENG_NOMZOD:.0%} × birinchi; eng kattasi olindi; 'Shubhali' varag'ida"),
+    ] + [
+        (f"   farqli ustunlar: {k}", int(v), "faqat shu ustun(lar) ikki guruhda har xil, qolganlari bir xil")
+        for k, v in nom_farq_soni.items()
     ] + ([
         (f"Deyarli teng 2 guruh — {FERMER_MANBADA} (shubhali)", int(sh_fer.sum()),
          f"faqat {FERMER_BIZDA} to'ldirilgan konturlar; 'Shubhali' varag'ida"),
@@ -490,12 +515,15 @@ def main() -> int:
         return olinadi.iloc[qatorlar][ustunlar].fillna("").astype(str).agg(" / ".join, axis=1).values
 
     shubhali = []
-    for tur, maska, m_df, ust in [("nomenklatura (" + " / ".join(USTUNLAR) + ")", sh_nom, mos, list(USTUNLAR)),
-                                  (FERMER_MANBADA, sh_fer, fmos, [FERMER_MANBADA])]:
+    for tur, maska, m_df, ust, farq in [
+        ("nomenklatura (" + " / ".join(USTUNLAR) + ")", sh_nom, mos, list(USTUNLAR), nom_farq),
+        (FERMER_MANBADA, sh_fer, fmos, [FERMER_MANBADA], fer_farq),
+    ]:
         if m_df is None or not maska.any():
             continue
         d = kontur_jadval(maska)
         d.insert(0, "Tur", tur)
+        d.insert(1, "Farqli ustunlar", farq)
         d["Ulush (olindi)"] = m_df.loc[maska, "ulush"].round(3).values
         d["Ulush (2-guruh)"] = m_df.loc[maska, "ulush2"].round(3).values
         d["Olingan qiymat"] = qiymat_matn(m_df.loc[maska, "m_qator"].values, ust)
