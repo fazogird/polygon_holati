@@ -65,6 +65,9 @@ run.bat      fenologiya muhitida skript ishga tushirish (activate shart emas)
 dashboard.bat  interaktiv dashboard (scripts/dashboard.py, fenologiya_viz muhiti) -> http://localhost:8501
 ```
 
+Viloyat shp lariga nomenklatura va fermer ma'lumotini o'tkazish skriptlari (avvalgi `viloyat_shp/`)
+alohida repoga ko'chirildi: `gitlab.spacemc.uz/d.nozimov/viloyat_shp` va `github.com/fazogird/viloyat_shp`.
+
 ## Pipeline
 | Qadam | Skript | Nima | Holat |
 |---|---|---|---|
