@@ -29,7 +29,7 @@ from __future__ import annotations
 KIRISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v5_viloyatlar_shp\fargona_viloyati.shp"
 
 # Ma'lumot olinadigan to'liq atributli shp. O'zgarmaydi (faqat o'qiladi).
-MANBA = r"D:\Tasks\level_otkazish\far_ekinyer\far_ekinyer\far_ekin2025.shp"
+MANBA = r"D:\Tasks\level_otkazish\far_ekinyer\Far_ekin2025\Far_ekin2025\Fargona_ekin2025.shp"
 
 # Natija shp (yangi fayl; KIRISH yoki MANBA bilan bir xil bo'lishi mumkin emas).
 CHIQISH = r"D:\Tasks\bir_ikki_lamchi\natija\ekin_yerlar_qisqa_v6_viloyatlar_shp\fargona_viloyati_v2.shp"
